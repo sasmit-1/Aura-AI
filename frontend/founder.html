@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aura AI — Founder Portal</title>
+    <meta name="description" content="Submit your climate tech pitch deck for AI-powered analysis by Aura AI.">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/styles.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Inter', 'sans-serif'], mono: ['JetBrains Mono', 'monospace'] },
+                    colors: {
+                        aura: {
+                            black: '#000000',
+                            surface: '#0a0a0a',
+                            card: '#111111',
+                            border: '#1a1a1a',
+                            dim: '#333333',
+                            muted: '#737373',
+                            green: '#00ff88',
+                            'green-dim': '#00cc6a',
+                            cyan: '#00d4ff',
+                            amber: '#ffb800',
+                            red: '#ff3b5c',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { background: #000; }
+        /* Glow effects */
+        .glow-green { box-shadow: 0 0 30px rgba(0, 255, 136, 0.15), 0 0 60px rgba(0, 255, 136, 0.05); }
+        .glow-border { border-color: rgba(0, 255, 136, 0.3); }
+        .text-glow { text-shadow: 0 0 20px rgba(0, 255, 136, 0.5); }
+        /* Upload zone */
+        .upload-zone {
+            border: 2px dashed #333;
+            transition: all 0.3s ease;
+        }
+        .upload-zone:hover, .upload-zone.drag-over {
+            border-color: #00ff88;
+            background: rgba(0, 255, 136, 0.03);
+            box-shadow: 0 0 40px rgba(0, 255, 136, 0.08);
+        }
+        /* Pulse animation for loading */
+        @keyframes pulse-glow {
+            0%, 100% { opacity: 0.4; box-shadow: 0 0 20px rgba(0, 255, 136, 0.1); }
+            50% { opacity: 1; box-shadow: 0 0 40px rgba(0, 255, 136, 0.3); }
+        }
+        .pulse-loading { animation: pulse-glow 2s ease-in-out infinite; }
+        /* Scan line animation */
+        @keyframes scan {
+            0% { transform: translateY(-100%); }
+            100% { transform: translateY(100%); }
+        }
+        .scan-line::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(transparent 40%, rgba(0,255,136,0.06) 50%, transparent 60%);
+            animation: scan 3s ease-in-out infinite;
+        }
+        /* Fade-in */
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .fade-up { animation: fadeUp 0.6s ease-out forwards; }
+        .fade-up-delay { animation: fadeUp 0.6s ease-out 0.2s forwards; opacity: 0; }
+    </style>
+</head>
+<body class="bg-aura-black text-white font-sans min-h-screen antialiased">
+
+    <!-- Nav -->
+    <nav class="fixed top-0 w-full z-50 bg-aura-black/80 backdrop-blur-xl border-b border-aura-border">
+        <div class="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
+            <a href="/index.html" class="flex items-center gap-3 group">
+                <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-aura-green/20 to-aura-cyan/20 border border-aura-green/30 flex items-center justify-center">
+                    <span class="text-aura-green font-bold text-sm">A</span>
+                </div>
+                <span class="text-white font-semibold tracking-tight">Aura <span class="text-aura-muted font-normal">AI</span></span>
+            </a>
+            <div class="flex items-center gap-6">
+                <a href="/founder.html" class="text-sm text-aura-green font-medium">Founder Portal</a>
+                <a href="/landing.html" class="px-4 py-1.5 bg-aura-card border border-aura-border rounded-lg text-xs font-medium text-aura-muted hover:border-aura-red/40 hover:text-aura-red transition-all duration-300">
+                    Sign Out
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main -->
+    <main class="pt-32 pb-20 px-6">
+        <div class="max-w-2xl mx-auto">
+
+            <!-- Header -->
+            <div class="text-center mb-12 fade-up">
+                <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-aura-green/10 border border-aura-green/20 text-aura-green text-xs font-medium mb-6">
+                    <span class="w-1.5 h-1.5 rounded-full bg-aura-green animate-pulse"></span>
+                    AI ANALYSIS ENGINE ONLINE
+                </div>
+                <h1 class="text-4xl md:text-5xl font-bold tracking-tight mb-4">
+                    Submit Your <span class="text-aura-green text-glow">Pitch Deck</span>
+                </h1>
+                <p class="text-aura-muted text-lg max-w-md mx-auto">
+                    Upload your climate-tech PDF. Aura's AI will extract key financial and scientific metrics in seconds.
+                </p>
+            </div>
+
+            <!-- Upload Form -->
+            <form id="upload-form" class="space-y-6 fade-up-delay">
+
+                <!-- Company Name -->
+                <div>
+                    <label for="company-name" class="block text-sm font-medium text-aura-muted mb-2">Company Name</label>
+                    <input type="text" id="company-name" name="company_name" placeholder="e.g. VoltaGrid Energy"
+                        class="w-full px-4 py-3 bg-aura-card border border-aura-border rounded-xl text-white placeholder-aura-dim focus:outline-none focus:border-aura-green/50 focus:ring-1 focus:ring-aura-green/20 transition-all">
+                </div>
+
+                <!-- Requested Funding -->
+                <div>
+                    <label for="funding" class="block text-sm font-medium text-aura-muted mb-2">Requested Funding</label>
+                    <div class="relative">
+                        <span class="absolute left-4 top-1/2 -translate-y-1/2 text-aura-dim">$</span>
+                        <input type="text" id="funding" name="funding" placeholder="18,000,000"
+                            class="w-full pl-8 pr-4 py-3 bg-aura-card border border-aura-border rounded-xl text-white placeholder-aura-dim focus:outline-none focus:border-aura-green/50 focus:ring-1 focus:ring-aura-green/20 transition-all">
+                    </div>
+                </div>
+
+                <!-- Milestone Description -->
+                <div>
+                    <label for="milestone-desc" class="block text-sm font-medium text-aura-muted mb-2">Key Milestone</label>
+                    <input type="text" id="milestone-desc" name="milestone_desc" placeholder="Phase 1: Lab Prototype Verification" value="Phase 1: Lab Prototype Verification"
+                        class="w-full px-4 py-3 bg-aura-card border border-aura-border rounded-xl text-white placeholder-aura-dim focus:outline-none focus:border-aura-green/50 focus:ring-1 focus:ring-aura-green/20 transition-all">
+                </div>
+
+                <!-- Phone Number -->
+                <div>
+                    <label for="phone" class="block text-sm font-medium text-aura-muted mb-2">Phone Number</label>
+                    <input type="tel" id="phone" name="phone" placeholder="+1 (512) 555-0199"
+                        class="w-full px-4 py-3 bg-aura-black border border-aura-border rounded-xl text-white placeholder-aura-dim focus:outline-none focus:border-aura-green/50 focus:ring-1 focus:ring-aura-green/20 transition-all">
+                </div>
+
+                <!-- LinkedIn Profile URL -->
+                <div>
+                    <label for="linkedin" class="block text-sm font-medium text-aura-muted mb-2">LinkedIn Profile URL</label>
+                    <input type="url" id="linkedin" name="linkedin" placeholder="https://linkedin.com/in/yourprofile"
+                        class="w-full px-4 py-3 bg-aura-black border border-aura-border rounded-xl text-white placeholder-aura-dim focus:outline-none focus:border-aura-green/50 focus:ring-1 focus:ring-aura-green/20 transition-all">
+                </div>
+
+                <!-- PDF Upload Zone -->
+                <div>
+                    <label class="block text-sm font-medium text-aura-muted mb-2">Pitch Deck (PDF)</label>
+                    <div id="upload-zone" class="upload-zone rounded-2xl p-10 text-center cursor-pointer relative overflow-hidden">
+                        <input type="file" id="pdf-file" accept=".pdf" class="hidden">
+                        <div id="upload-placeholder">
+                            <div class="w-14 h-14 mx-auto mb-4 rounded-2xl bg-aura-card border border-aura-border flex items-center justify-center">
+                                <svg class="w-6 h-6 text-aura-muted" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"/>
+                                </svg>
+                            </div>
+                            <p class="text-white font-medium mb-1">Drop your PDF here or click to browse</p>
+                            <p class="text-aura-dim text-sm">Maximum file size: 50MB</p>
+                        </div>
+                        <div id="upload-selected" class="hidden">
+                            <div class="w-14 h-14 mx-auto mb-4 rounded-2xl bg-aura-green/10 border border-aura-green/30 flex items-center justify-center">
+                                <svg class="w-6 h-6 text-aura-green" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                </svg>
+                            </div>
+                            <p class="text-aura-green font-medium mb-1" id="selected-filename"></p>
+                            <p class="text-aura-dim text-sm">Ready for AI analysis</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Submit Button -->
+                <button type="submit" id="submit-btn"
+                    class="w-full py-4 bg-aura-green text-black font-semibold rounded-xl hover:bg-aura-green-dim transition-all duration-300 hover:shadow-lg hover:shadow-aura-green/20 disabled:opacity-40 disabled:cursor-not-allowed">
+                    Analyze with Aura AI
+                </button>
+            </form>
+
+            <!-- Loading State -->
+            <div id="loading-state" class="hidden mt-6">
+                <div class="bg-aura-card border border-aura-green/20 rounded-2xl p-8 text-center pulse-loading scan-line relative overflow-hidden">
+                    <div class="relative z-10">
+                        <div class="w-16 h-16 mx-auto mb-5 rounded-full border-2 border-aura-green/30 border-t-aura-green animate-spin"></div>
+                        <p class="text-aura-green font-semibold text-lg mb-2">Aura AI is analyzing your pitch deck...</p>
+                        <p class="text-aura-muted text-sm" id="loading-status">Verifying physical and thermodynamic claims</p>
+                        <div class="flex items-center justify-center gap-1 mt-4">
+                            <span class="w-1 h-1 bg-aura-green/50 rounded-full animate-bounce" style="animation-delay: 0s"></span>
+                            <span class="w-1 h-1 bg-aura-green/50 rounded-full animate-bounce" style="animation-delay: 0.15s"></span>
+                            <span class="w-1 h-1 bg-aura-green/50 rounded-full animate-bounce" style="animation-delay: 0.3s"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Result State -->
+            <div id="result-state" class="hidden mt-6">
+                <div class="bg-aura-card border border-aura-green/30 rounded-2xl p-8 glow-green">
+                    <div class="flex items-center gap-3 mb-6">
+                        <div class="w-10 h-10 rounded-full bg-aura-green/10 flex items-center justify-center">
+                            <svg class="w-5 h-5 text-aura-green" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                            </svg>
+                        </div>
+                        <div>
+                            <h3 class="text-white font-semibold">Analysis Complete</h3>
+                            <p class="text-aura-muted text-sm">Your project has been added to the Deal Matrix</p>
+                        </div>
+                    </div>
+                    <div id="result-metrics" class="grid grid-cols-2 gap-4 mb-6"></div>
+                    <button onclick="resetFounderForm()" class="block w-full py-3 text-center bg-aura-green/10 border border-aura-green/30 text-aura-green font-medium rounded-xl hover:bg-aura-green/20 transition-all cursor-pointer">
+                        Submit Another Pitch
+                    </button>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- ═══════════════════════════════════════════════════════
+             Founder Control Center (hidden until upload succeeds)
+             ═══════════════════════════════════════════════════════ -->
+        <div id="founder-dashboard" class="hidden max-w-4xl mx-auto mt-12 space-y-8 fade-up">
+
+            <!-- Dashboard Header -->
+            <div class="flex items-center justify-between">
+                <div>
+                    <h2 class="text-2xl font-bold text-white tracking-tight">Founder Control Center</h2>
+                    <p class="text-aura-muted text-sm mt-1">Real-time view of your project's investment pipeline</p>
+                </div>
+                <div class="flex items-center gap-2 px-3 py-1.5 rounded-full bg-aura-green/10 border border-aura-green/20">
+                    <span class="w-2 h-2 rounded-full bg-green-400 animate-pulse"></span>
+                    <span class="text-aura-green text-xs font-medium">LIVE</span>
+                </div>
+            </div>
+
+            <!-- Analytics Row -->
+            <div class="grid grid-cols-3 gap-4">
+                <div class="bg-[#111111] border border-[#1a1a1a] rounded-2xl p-5 text-center">
+                    <p class="text-[10px] text-aura-muted uppercase tracking-wider mb-2">Active VC Views</p>
+                    <p id="dash-vc-views" class="text-white font-bold text-3xl">—</p>
+                </div>
+                <div class="bg-[#111111] border border-[#1a1a1a] rounded-2xl p-5 text-center">
+                    <p class="text-[10px] text-aura-muted uppercase tracking-wider mb-2">Avg Thesis Alignment</p>
+                    <p id="dash-thesis-avg" class="text-aura-green font-bold text-3xl">—</p>
+                </div>
+                <div class="bg-[#111111] border border-[#1a1a1a] rounded-2xl p-5 text-center">
+                    <p class="text-[10px] text-aura-muted uppercase tracking-wider mb-2">Capital Committed</p>
+                    <p id="dash-capital" class="text-cyan-400 font-bold text-3xl">$0</p>
+                </div>
+            </div>
+
+            <!-- Escrow Tracker -->
+            <div class="bg-[#111111] border border-[#1a1a1a] rounded-2xl p-6">
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="text-xs font-semibold text-aura-muted uppercase tracking-wider">Smart Escrow Tracker</h3>
+                    <span id="dash-escrow-badge" class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold border
+                         bg-amber-500/10 border-amber-500/30 text-amber-400"
+                         style="box-shadow: 0 0 12px rgba(245,158,11,0.15);">
+                        🔒 LOCKED
+                    </span>
+                </div>
+                <div class="bg-[#0a0a0a] rounded-xl p-4">
+                    <p class="text-[10px] text-aura-muted uppercase tracking-wider mb-2">Next Funding Tranche Milestone</p>
+                    <p id="dash-milestone" class="text-cyan-400 text-sm font-mono leading-relaxed">—</p>
+                </div>
+            </div>
+
+            <!-- AI Pitch Feedback (Red Team) -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- Market Comps -->
+                <div class="bg-[#111111] border border-violet-500/10 rounded-2xl p-5">
+                    <h4 class="text-xs font-semibold text-violet-400 uppercase tracking-wider mb-3">Market Comps</h4>
+                    <div id="dash-competitors" class="flex flex-wrap gap-2">
+                        <span class="text-aura-dim text-sm">—</span>
+                    </div>
+                </div>
+
+                <!-- Security Vulnerabilities -->
+                <div class="bg-[#111111] border border-orange-500/10 rounded-2xl p-5">
+                    <h4 class="text-xs font-semibold text-orange-400 uppercase tracking-wider mb-3">Security Vulnerabilities</h4>
+                    <ul id="dash-vulns" class="space-y-2">
+                        <li class="text-aura-dim text-sm">—</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Red Flags -->
+            <div id="dash-red-flags-container" class="hidden rounded-2xl overflow-hidden">
+                <div class="bg-red-600 px-5 py-3 flex items-center gap-3">
+                    <svg class="w-5 h-5 text-white flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.082 16.5c-.77.833.192 2.5 1.732 2.5z"/>
+                    </svg>
+                    <span class="text-white font-bold text-sm uppercase tracking-wider">⚠ Critical Red Flags</span>
+                </div>
+                <div class="bg-red-950/80 border border-red-600/30 px-5 py-4">
+                    <ul id="dash-red-flags" class="space-y-2"></ul>
+                </div>
+            </div>
+
+            <!-- Deal Room -->
+            <div class="bg-[#111111] border border-[#1a1a1a] rounded-2xl p-6">
+                <h3 class="text-xs font-semibold text-aura-muted uppercase tracking-wider mb-4">Deal Room — Incoming Requests</h3>
+                <ul id="deal-room-log" class="space-y-3">
+                    <li class="text-aura-dim text-sm font-mono">Waiting for investor activity...</li>
+                </ul>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="border-t border-aura-border py-8">
+        <div class="max-w-6xl mx-auto px-6 flex items-center justify-between">
+            <p class="text-aura-dim text-sm">© 2026 Aura AI — Climate Capital Operating System</p>
+            <p class="text-aura-dim text-xs font-mono">v0.2.0</p>
+        </div>
+    </footer>
+
+    <script src="/js/app.js"></script>
+
+    <!-- Toast Notification (for VC call requests) -->
+    <div id="call-toast" class="hidden fixed bottom-6 right-6 z-50 max-w-sm px-5 py-4 rounded-2xl bg-[#0a0a0a] border border-aura-green/40"
+         style="box-shadow: 0 0 30px rgba(0,255,136,0.12), 0 8px 24px rgba(0,0,0,0.5);">
+        <div class="flex items-start gap-3">
+            <span class="text-2xl">🔔</span>
+            <span id="call-toast-msg" class="text-gray-200 text-sm leading-relaxed"></span>
+        </div>
+    </div>
+
+    <!-- Founder Control Center — JS Logic -->
+    <script>
+    (function() {
+        let _founderProjectId = null;
+
+        // ── Reset form (Submit Another Pitch) ──
+        window.resetFounderForm = function() {
+            const form = document.getElementById('upload-form');
+            const resultState = document.getElementById('result-state');
+            const terminal = document.getElementById('hacker-terminal');
+            const dashboard = document.getElementById('founder-dashboard');
+
+            if (form) { form.reset(); form.classList.remove('hidden'); }
+            if (resultState) resultState.classList.add('hidden');
+            if (terminal) terminal.classList.add('hidden');
+            if (dashboard) dashboard.classList.add('hidden');
+
+            const placeholder = document.getElementById('upload-placeholder');
+            const selected = document.getElementById('upload-selected');
+            if (placeholder) placeholder.classList.remove('hidden');
+            if (selected) selected.classList.add('hidden');
+
+            _founderProjectId = null;
+        };
+
+        // ── Populate Founder Dashboard ──
+        window.populateFounderDashboard = function(project) {
+            _founderProjectId = project.id;
+
+            const dashboard = document.getElementById('founder-dashboard');
+            if (dashboard) dashboard.classList.remove('hidden');
+
+            // Analytics mock stats
+            const vcViews = Math.floor(Math.random() * (45 - 12 + 1)) + 12;
+            const thesisAvg = project.thesis_match_score || 0;
+            const el = (id) => document.getElementById(id);
+
+            if (el('dash-vc-views')) el('dash-vc-views').textContent = vcViews;
+            if (el('dash-thesis-avg')) el('dash-thesis-avg').textContent = thesisAvg + '%';
+
+            // Milestone
+            if (el('dash-milestone')) {
+                el('dash-milestone').textContent = project.smart_milestone || 'No milestone defined';
+            }
+
+            // Competitors
+            const comps = el('dash-competitors');
+            if (comps && project.competitor_landscape && project.competitor_landscape.length) {
+                comps.innerHTML = project.competitor_landscape.map(c =>
+                    `<span class="inline-flex items-center px-3 py-1.5 rounded-lg bg-[#1a1a1a] border border-[#2a2a2a] text-gray-300 text-xs font-mono">${c}</span>`
+                ).join('');
+            }
+
+            // Security Vulnerabilities
+            const vulns = el('dash-vulns');
+            if (vulns && project.security_vulnerabilities && project.security_vulnerabilities.length) {
+                vulns.innerHTML = project.security_vulnerabilities.map(v =>
+                    `<li class="flex items-start gap-2"><span class="text-orange-400 mt-0.5">🛡</span><span class="text-gray-300 text-sm">${v}</span></li>`
+                ).join('');
+            }
+
+            // Red Flags
+            const flags = project.red_flag_warnings || [];
+            const flagContainer = el('dash-red-flags-container');
+            const flagList = el('dash-red-flags');
+            if (flagContainer && flagList) {
+                if (flags.length > 0) {
+                    flagContainer.classList.remove('hidden');
+                    flagList.innerHTML = flags.map(f =>
+                        `<li class="flex items-start gap-2"><span class="text-red-300 mt-0.5">🚩</span><span class="text-red-200 text-sm">${f}</span></li>`
+                    ).join('');
+                } else {
+                    flagContainer.classList.add('hidden');
+                }
+            }
+        };
+
+        // ── WebSocket Patch — listen for escrow + call events ──
+        function patchWS() {
+            if (typeof ws === 'undefined' || !ws) { setTimeout(patchWS, 500); return; }
+            const prev = ws.onmessage;
+            ws.onmessage = function(event) {
+                if (prev) prev(event);
+                try {
+                    const data = JSON.parse(event.data);
+
+                    // Escrow disbursement
+                    if (data.event === 'milestone_verified' && _founderProjectId && data.project_id === _founderProjectId) {
+                        const badge = document.getElementById('dash-escrow-badge');
+                        if (badge) {
+                            badge.className = 'inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold border bg-emerald-500/10 border-emerald-500/30 text-emerald-400 success-pulse';
+                            badge.innerHTML = '✓ DISBURSED';
+                            
+                            // Remove pulse class after animation completes to allow re-trigger if needed
+                            setTimeout(() => { badge.classList.remove('success-pulse'); }, 600);
+                        }
+                        // Update capital committed
+                        const cap = document.getElementById('dash-capital');
+                        if (cap) cap.textContent = '$500K';
+                    }
+
+                    // Call requested
+                    if (data.event === 'call_requested') {
+                        showCallToast('VC Investor is requesting a live diligence call for your project!');
+
+                        // Append to Deal Room log
+                        if (_founderProjectId && data.project_id === _founderProjectId) {
+                            const log = document.getElementById('deal-room-log');
+                            if (log) {
+                                // Clear placeholder text
+                                if (log.querySelector('.text-aura-dim')) log.innerHTML = '';
+
+                                const time = new Date().toLocaleTimeString('en-US', { hour12: false });
+                                const li = document.createElement('li');
+                                li.className = 'flex items-center gap-3 p-3 rounded-xl bg-[#0a0a0a] border border-aura-green/10';
+                                li.innerHTML = `
+                                    <span class="text-lg">📞</span>
+                                    <div class="flex-1">
+                                        <p class="text-white text-sm font-medium">Aura Ventures requested a live diligence call.</p>
+                                        <p class="text-aura-dim text-xs font-mono mt-0.5">${time} · Status: Pending</p>
+                                    </div>
+                                `;
+                                log.prepend(li);
+                            }
+                        }
+                    }
+                } catch(e) {}
+            };
+        }
+        patchWS();
+
+        function showCallToast(msg) {
+            const toast = document.getElementById('call-toast');
+            const msgEl = document.getElementById('call-toast-msg');
+            if (!toast || !msgEl) return;
+            msgEl.textContent = msg;
+            toast.classList.remove('hidden');
+            setTimeout(() => toast.classList.add('hidden'), 5000);
+        }
+    })();
+    </script>
+</body>
+</html>

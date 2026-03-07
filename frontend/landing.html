@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aura AI — Climate Capital Operating System</title>
+    <meta name="description" content="Deterministic AI due diligence and autonomous smart-contract escrows for climate tech. The future of climate capital starts here.">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Inter', 'sans-serif'], mono: ['JetBrains Mono', 'monospace'] },
+                    colors: {
+                        aura: {
+                            black: '#000000',
+                            surface: '#0a0a0a',
+                            card: '#111111',
+                            border: '#1a1a1a',
+                            dim: '#333333',
+                            muted: '#737373',
+                            green: '#00ff88',
+                            'green-dim': '#00cc6a',
+                            cyan: '#00d4ff',
+                            amber: '#ffb800',
+                            red: '#ff3b5c',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { background: #000; }
+
+        /* Hero gradient pulses */
+        .hero-glow {
+            background:
+                radial-gradient(ellipse 80% 50% at 50% -10%, rgba(0,255,136,0.08) 0%, transparent 60%),
+                radial-gradient(ellipse 60% 40% at 80% 50%, rgba(0,212,255,0.05) 0%, transparent 50%),
+                radial-gradient(ellipse 40% 30% at 20% 60%, rgba(0,255,136,0.03) 0%, transparent 50%);
+        }
+
+        /* Animated grid background */
+        .grid-bg {
+            background-image:
+                linear-gradient(rgba(0,255,136,0.025) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0,255,136,0.025) 1px, transparent 1px);
+            background-size: 80px 80px;
+        }
+
+        /* Glow buttons */
+        .btn-glow-green {
+            box-shadow: 0 0 30px rgba(0,255,136,0.15), 0 0 60px rgba(0,255,136,0.05);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .btn-glow-green:hover {
+            box-shadow: 0 0 40px rgba(0,255,136,0.3), 0 0 80px rgba(0,255,136,0.1);
+            transform: translateY(-2px);
+        }
+        .btn-glow-cyan {
+            box-shadow: 0 0 30px rgba(0,212,255,0.12), 0 0 60px rgba(0,212,255,0.04);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .btn-glow-cyan:hover {
+            box-shadow: 0 0 40px rgba(0,212,255,0.25), 0 0 80px rgba(0,212,255,0.08);
+            transform: translateY(-2px);
+        }
+
+        /* Text glow */
+        .text-glow-green { text-shadow: 0 0 40px rgba(0,255,136,0.3), 0 0 80px rgba(0,255,136,0.1); }
+        .text-glow-cyan { text-shadow: 0 0 30px rgba(0,212,255,0.3); }
+
+        /* Fade animations */
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-8px); }
+        }
+        @keyframes pulse-ring {
+            0% { transform: scale(1); opacity: 0.3; }
+            100% { transform: scale(1.8); opacity: 0; }
+        }
+        .fade-up { animation: fadeUp 0.8s ease-out forwards; }
+        .fade-up-1 { animation: fadeUp 0.8s ease-out 0.15s forwards; opacity: 0; }
+        .fade-up-2 { animation: fadeUp 0.8s ease-out 0.3s forwards; opacity: 0; }
+        .fade-up-3 { animation: fadeUp 0.8s ease-out 0.45s forwards; opacity: 0; }
+        .fade-up-4 { animation: fadeUp 0.8s ease-out 0.6s forwards; opacity: 0; }
+        .fade-in { animation: fadeIn 1s ease-out forwards; }
+        .float-anim { animation: float 6s ease-in-out infinite; }
+
+        /* Stat card hover */
+        .stat-card {
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .stat-card:hover {
+            border-color: rgba(0,255,136,0.3);
+            transform: translateY(-4px);
+            box-shadow: 0 20px 60px rgba(0,0,0,0.5), 0 0 30px rgba(0,255,136,0.05);
+        }
+
+        /* Divider glow */
+        .divider-glow {
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(0,255,136,0.3), rgba(0,212,255,0.2), transparent);
+        }
+    </style>
+</head>
+<body class="bg-black text-white font-sans min-h-screen antialiased">
+
+    <!-- Nav -->
+    <nav class="fixed top-0 w-full z-50 bg-black/70 backdrop-blur-xl border-b border-aura-border">
+        <div class="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-aura-green/20 to-aura-cyan/20 border border-aura-green/30 flex items-center justify-center">
+                    <span class="text-aura-green font-bold text-sm">A</span>
+                </div>
+                <span class="text-white font-semibold tracking-tight text-lg">Aura <span class="text-aura-muted font-normal">AI</span></span>
+            </div>
+            <div class="flex items-center gap-6">
+                <a href="#features" class="hidden sm:inline text-sm text-aura-muted hover:text-white transition-colors">Features</a>
+                <a href="#how-it-works" class="hidden sm:inline text-sm text-aura-muted hover:text-white transition-colors">How It Works</a>
+                <a href="/auth.html" class="px-5 py-2 bg-aura-card border border-aura-border rounded-lg text-sm font-medium text-white hover:border-aura-green/40 hover:text-aura-green transition-all duration-300">
+                    Sign In
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="relative min-h-screen flex items-center justify-center hero-glow grid-bg overflow-hidden">
+        <!-- Decorative orbs -->
+        <div class="absolute top-1/4 left-1/4 w-96 h-96 bg-aura-green/5 rounded-full blur-[120px] float-anim"></div>
+        <div class="absolute bottom-1/4 right-1/4 w-80 h-80 bg-aura-cyan/5 rounded-full blur-[100px] float-anim" style="animation-delay: -3s;"></div>
+
+        <div class="relative z-10 max-w-5xl mx-auto px-6 text-center pt-20">
+            <!-- Badge -->
+            <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-aura-green/8 border border-aura-green/20 text-aura-green text-xs font-medium mb-8 fade-up">
+                <span class="relative flex h-2 w-2">
+                    <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-aura-green opacity-75"></span>
+                    <span class="relative inline-flex rounded-full h-2 w-2 bg-aura-green"></span>
+                </span>
+                NOW IN PRIVATE BETA
+            </div>
+
+            <!-- Headline -->
+            <h1 class="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-black tracking-tight leading-[0.95] mb-8 fade-up-1">
+                <span class="block">Aura AI</span>
+                <span class="block mt-2 text-glow-green">
+                    <span class="bg-gradient-to-r from-aura-green via-emerald-400 to-aura-cyan bg-clip-text text-transparent">
+                        Climate Capital
+                    </span>
+                </span>
+                <span class="block mt-2 text-aura-muted text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold">
+                    Operating System
+                </span>
+            </h1>
+
+            <!-- Subtext -->
+            <p class="text-lg sm:text-xl text-aura-muted max-w-2xl mx-auto mb-12 leading-relaxed fade-up-2">
+                Deterministic AI due diligence and autonomous smart-contract escrows for climate tech.
+                <span class="text-white/80">The future of climate capital starts here.</span>
+            </p>
+
+            <!-- CTA Buttons -->
+            <div class="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-6 mb-16 fade-up-3">
+                <a href="/auth.html?role=founder" id="cta-founder"
+                   class="btn-glow-green group w-full sm:w-auto inline-flex items-center justify-center gap-3 px-8 py-4 bg-aura-green/10 border border-aura-green/40 rounded-2xl text-aura-green font-semibold text-lg hover:bg-aura-green/15 transition-all">
+                    <svg class="w-5 h-5 group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                    </svg>
+                    I am a Founder
+                </a>
+                <a href="/auth.html?role=investor" id="cta-investor"
+                   class="btn-glow-cyan group w-full sm:w-auto inline-flex items-center justify-center gap-3 px-8 py-4 bg-aura-cyan/10 border border-aura-cyan/40 rounded-2xl text-aura-cyan font-semibold text-lg hover:bg-aura-cyan/15 transition-all">
+                    <svg class="w-5 h-5 group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/>
+                    </svg>
+                    I am an Investor
+                </a>
+            </div>
+
+            <!-- Trust line -->
+            <p class="text-xs text-aura-dim font-mono tracking-wider fade-up-4">
+                BACKED BY SCIENCE · POWERED BY AI · SECURED BY SMART CONTRACTS
+            </p>
+        </div>
+
+        <!-- Bottom gradient fade -->
+        <div class="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-black to-transparent z-10"></div>
+    </section>
+
+    <!-- Divider -->
+    <div class="divider-glow"></div>
+
+    <!-- Features Section -->
+    <section id="features" class="py-24 px-6">
+        <div class="max-w-7xl mx-auto">
+            <div class="text-center mb-16">
+                <p class="text-aura-green text-xs font-mono tracking-widest uppercase mb-3">The Platform</p>
+                <h2 class="text-3xl sm:text-4xl font-bold tracking-tight mb-4">Three Pillars of Climate Capital</h2>
+                <p class="text-aura-muted max-w-lg mx-auto">End-to-end infrastructure, from pitch deck to disbursement — fully autonomous.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <!-- Card 1: RAG Engine -->
+                <div class="stat-card bg-aura-card border border-aura-border rounded-2xl p-8">
+                    <div class="w-12 h-12 rounded-xl bg-aura-green/10 border border-aura-green/20 flex items-center justify-center mb-6">
+                        <svg class="w-6 h-6 text-aura-green" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/>
+                        </svg>
+                    </div>
+                    <h3 class="text-white font-semibold text-lg mb-2">AI Due Diligence</h3>
+                    <p class="text-aura-muted text-sm leading-relaxed">
+                        Upload a pitch deck PDF. Our RAG engine extracts scientific claims, cross-references
+                        thermodynamic data, and produces a deterministic feasibility score in seconds.
+                    </p>
+                    <div class="mt-6 pt-4 border-t border-aura-border">
+                        <p class="text-aura-green text-xs font-mono">Llama 3.3 70B · Groq Inference</p>
+                    </div>
+                </div>
+
+                <!-- Card 2: Smart Escrow -->
+                <div class="stat-card bg-aura-card border border-aura-border rounded-2xl p-8">
+                    <div class="w-12 h-12 rounded-xl bg-aura-amber/10 border border-aura-amber/20 flex items-center justify-center mb-6">
+                        <svg class="w-6 h-6 text-aura-amber" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
+                        </svg>
+                    </div>
+                    <h3 class="text-white font-semibold text-lg mb-2">Smart Escrow</h3>
+                    <p class="text-aura-muted text-sm leading-relaxed">
+                        Milestone-based capital deployment. Funds are locked in escrow and disbursed
+                        autonomously only when oracle verification confirms real-world progress.
+                    </p>
+                    <div class="mt-6 pt-4 border-t border-aura-border">
+                        <p class="text-aura-amber text-xs font-mono">Locked → Verified → Disbursed</p>
+                    </div>
+                </div>
+
+                <!-- Card 3: Real-time -->
+                <div class="stat-card bg-aura-card border border-aura-border rounded-2xl p-8">
+                    <div class="w-12 h-12 rounded-xl bg-aura-cyan/10 border border-aura-cyan/20 flex items-center justify-center mb-6">
+                        <svg class="w-6 h-6 text-aura-cyan" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M13 10V3L4 14h7v7l9-11h-7z"/>
+                        </svg>
+                    </div>
+                    <h3 class="text-white font-semibold text-lg mb-2">Real-Time Feed</h3>
+                    <p class="text-aura-muted text-sm leading-relaxed">
+                        WebSocket-powered live dashboard. Every oracle verification event, escrow
+                        disbursement, and new deal instantly broadcasts to all connected investors.
+                    </p>
+                    <div class="mt-6 pt-4 border-t border-aura-border">
+                        <p class="text-aura-cyan text-xs font-mono">WebSocket · Sub-second latency</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Divider -->
+    <div class="divider-glow"></div>
+
+    <!-- How It Works -->
+    <section id="how-it-works" class="py-24 px-6 grid-bg">
+        <div class="max-w-5xl mx-auto">
+            <div class="text-center mb-16">
+                <p class="text-aura-cyan text-xs font-mono tracking-widest uppercase mb-3">The Flow</p>
+                <h2 class="text-3xl sm:text-4xl font-bold tracking-tight mb-4">How Aura AI Works</h2>
+                <p class="text-aura-muted max-w-md mx-auto">From pitch deck to funded milestone — fully autonomous, fully transparent.</p>
+            </div>
+
+            <div class="space-y-6">
+                <!-- Step 1 -->
+                <div class="flex items-start gap-6 p-6 rounded-2xl bg-aura-card/50 border border-aura-border hover:border-aura-green/20 transition-colors">
+                    <div class="flex-shrink-0 w-10 h-10 rounded-full bg-aura-green/10 border border-aura-green/30 flex items-center justify-center">
+                        <span class="text-aura-green font-bold text-sm">1</span>
+                    </div>
+                    <div>
+                        <h3 class="text-white font-semibold mb-1">Founder uploads pitch deck</h3>
+                        <p class="text-aura-muted text-sm">Submit your climate-tech PDF. Aura's RAG engine extracts CAPEX, efficiency targets, and scientific claims instantly.</p>
+                    </div>
+                </div>
+                <!-- Step 2 -->
+                <div class="flex items-start gap-6 p-6 rounded-2xl bg-aura-card/50 border border-aura-border hover:border-aura-green/20 transition-colors">
+                    <div class="flex-shrink-0 w-10 h-10 rounded-full bg-aura-green/10 border border-aura-green/30 flex items-center justify-center">
+                        <span class="text-aura-green font-bold text-sm">2</span>
+                    </div>
+                    <div>
+                        <h3 class="text-white font-semibold mb-1">AI generates feasibility score</h3>
+                        <p class="text-aura-muted text-sm">Llama 3.3 70B cross-references scientific databases to assign a deterministic 1-100 feasibility score.</p>
+                    </div>
+                </div>
+                <!-- Step 3 -->
+                <div class="flex items-start gap-6 p-6 rounded-2xl bg-aura-card/50 border border-aura-border hover:border-aura-amber/20 transition-colors">
+                    <div class="flex-shrink-0 w-10 h-10 rounded-full bg-aura-amber/10 border border-aura-amber/30 flex items-center justify-center">
+                        <span class="text-aura-amber font-bold text-sm">3</span>
+                    </div>
+                    <div>
+                        <h3 class="text-white font-semibold mb-1">Investor deploys capital to escrow</h3>
+                        <p class="text-aura-muted text-sm">Funds are locked against specific milestones. No disbursement until oracle verification confirms progress.</p>
+                    </div>
+                </div>
+                <!-- Step 4 -->
+                <div class="flex items-start gap-6 p-6 rounded-2xl bg-aura-card/50 border border-aura-border hover:border-aura-cyan/20 transition-colors">
+                    <div class="flex-shrink-0 w-10 h-10 rounded-full bg-aura-cyan/10 border border-aura-cyan/30 flex items-center justify-center">
+                        <span class="text-aura-cyan font-bold text-sm">4</span>
+                    </div>
+                    <div>
+                        <h3 class="text-white font-semibold mb-1">Oracle verifies → funds disburse</h3>
+                        <p class="text-aura-muted text-sm">Earth Engine API + lab telemetry confirm real-world progress. Smart contract releases funds automatically.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Divider -->
+    <div class="divider-glow"></div>
+
+    <!-- Final CTA -->
+    <section class="py-32 px-6 text-center relative overflow-hidden">
+        <div class="absolute inset-0 hero-glow opacity-50"></div>
+        <div class="relative z-10 max-w-3xl mx-auto">
+            <h2 class="text-4xl sm:text-5xl font-bold tracking-tight mb-6">
+                Ready to fund the <span class="text-aura-green text-glow-green">future</span>?
+            </h2>
+            <p class="text-aura-muted text-lg mb-10">Join the private beta. Whether you're building climate tech or investing in it.</p>
+            <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
+                <a href="/auth.html?role=founder"
+                   class="btn-glow-green w-full sm:w-auto px-8 py-4 bg-aura-green text-black font-semibold rounded-2xl hover:bg-aura-green-dim transition-all text-lg">
+                    Get Started as Founder
+                </a>
+                <a href="/auth.html?role=investor"
+                   class="btn-glow-cyan w-full sm:w-auto px-8 py-4 bg-aura-card border border-aura-cyan/40 text-aura-cyan font-semibold rounded-2xl hover:bg-aura-cyan/10 transition-all text-lg">
+                    Join as Investor
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="border-t border-aura-border py-10">
+        <div class="max-w-7xl mx-auto px-6 flex flex-col sm:flex-row items-center justify-between gap-4">
+            <div class="flex items-center gap-3">
+                <div class="w-6 h-6 rounded-md bg-gradient-to-br from-aura-green/20 to-aura-cyan/20 border border-aura-green/30 flex items-center justify-center">
+                    <span class="text-aura-green font-bold text-[10px]">A</span>
+                </div>
+                <p class="text-aura-dim text-sm">© 2026 Aura AI — Climate Capital Operating System</p>
+            </div>
+            <p class="text-aura-dim text-xs font-mono">v0.1.0</p>
+        </div>
+    </footer>
+
+</body>
+</html>

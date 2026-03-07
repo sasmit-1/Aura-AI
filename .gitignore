@@ -1,0 +1,37 @@
+# Environments
+.env
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# Python overrides and caches
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+
+# Database
+*.db
+*.sqlite3
+backend/data/aura.db
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# IDEs and Editors
+.vscode/
+.idea/
+*.swp
+*.swo
+
+backend/uploads/*
+!backend/uploads/.gitkeep
