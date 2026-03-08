@@ -78,7 +78,9 @@ class Project(Base):
     smart_milestone = Column(String(500), nullable=True)
     competitor_landscape = Column(Text, nullable=True)       # JSON-encoded list
     ip_defensibility_score = Column(Integer, nullable=True)
+    ip_collision_risk = Column(String(500), nullable=True)
     security_vulnerabilities = Column(Text, nullable=True)   # JSON-encoded list
+    cyber_vulnerabilities = Column(Text, nullable=True)      # JSON-encoded list
 
     # Red flag detection
     red_flag_warnings = Column(Text, nullable=True)          # JSON-encoded list
@@ -126,7 +128,9 @@ class Project(Base):
             "smart_milestone": self.smart_milestone,
             "competitor_landscape": self._parse_json_list(self.competitor_landscape),
             "ip_defensibility_score": self.ip_defensibility_score,
+            "ip_collision_risk": self.ip_collision_risk,
             "security_vulnerabilities": self._parse_json_list(self.security_vulnerabilities),
+            "cyber_vulnerabilities": self._parse_json_list(self.cyber_vulnerabilities),
             "red_flag_warnings": self._parse_json_list(self.red_flag_warnings),
             "status": self.status,
             "created_at": self.created_at.isoformat() if self.created_at else None,

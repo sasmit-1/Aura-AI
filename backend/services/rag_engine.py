@@ -22,7 +22,10 @@ from groq import AsyncGroq
 
 load_dotenv()  # pulls GROQ_API_KEY from .env
 
-api_key=os.getenv("GROQ_API_KEY")
+GROQ_API_KEY = os.getenv(
+    "GROQ_API_KEY",
+    "insert your api key here",
+)
 
 client = AsyncGroq(api_key=GROQ_API_KEY)
 
@@ -105,9 +108,13 @@ class ProjectMetrics(BaseModel):
         le=100,
         description="IP and technology defensibility score from 0 (no moat) to 100 (fortress-grade moat)",
     )
-    security_vulnerabilities: list[str] = Field(
+    ip_collision_risk: str = Field(
         ...,
-        description="List of 2-4 specific cybersecurity or hardware security vulnerabilities (e.g. IoT sensor spoofing, side-channel attacks, supply chain data leaks)",
+        description="A 1-sentence summary of real-world companies or existing patents this technology is likely to infringe upon or compete with.",
+    )
+    cyber_vulnerabilities: list[str] = Field(
+        ...,
+        description="List of 2-3 specific cybersecurity risks related to Battery Management Systems (BMS), firmware side-channel attacks, or grid IoT spoofing",
     )
     red_flag_warnings: list[str] = Field(
         default_factory=list,
@@ -227,10 +234,9 @@ For each pitch deck you MUST:
    cycles at 95% capacity retention on pilot-line cells").
 10. Identify 2-3 real-world COMPETITOR COMPANIES in this space.
 11. Evaluate IP DEFENSIBILITY (1-100) — how strong is the patent/trade-secret moat?
-12. List 2-4 specific SECURITY VULNERABILITIES in the hardware/software stack
-    (e.g. IoT sensor spoofing, side-channel attacks on BMS firmware, supply chain data leaks,
-    SCADA protocol vulnerabilities).
-13. RED FLAG DETECTION: Evaluate the physics and scientific claims for impossible or implausible
+12. Analyze the core hardware/software mechanism described in the document. Identify 1 or 2 real-world companies or existing patents that this technology is likely to infringe upon or compete with. Return a 1-sentence summary for the `ip_collision_risk` field (e.g., 'High collision risk with Tesla's 4680 cell tabless architecture' or 'Low risk, highly novel approach').
+13. Analyze the hardware/software architecture. Identify 2-3 specific cybersecurity risks related to Battery Management Systems (BMS), firmware side-channel attacks, or grid IoT spoofing. Return them in the `cyber_vulnerabilities` array.
+14. RED FLAG DETECTION: Evaluate the physics and scientific claims for impossible or implausible
     statements. If the document contains scientifically impossible claims, violates thermodynamics
     (e.g. perpetual motion, >100% efficiency, Carnot limit violations), or uses pure pseudoscience
     buzzwords (e.g. "quantum energy harvesting", "zero-point extraction"), extract the exact
@@ -255,7 +261,8 @@ You MUST return ONLY a valid JSON object with exactly these keys:
 - "smart_milestone": string — specific technical milestone
 - "competitor_landscape": array of strings (2-3 companies)
 - "ip_defensibility_score": integer 1-100
-- "security_vulnerabilities": array of strings (2-4 items)
+- "ip_collision_risk": string
+- "cyber_vulnerabilities": array of strings (2-3 items)
 - "red_flag_warnings": array of strings (0+ items, empty if science is sound)
 
 Return ONLY the JSON object. No markdown fences, no commentary, no extra text."""
@@ -283,7 +290,8 @@ Return a JSON object with exactly these keys:
 - "smart_milestone": string
 - "competitor_landscape": array of strings (2-3)
 - "ip_defensibility_score": integer 1-100
-- "security_vulnerabilities": array of strings (2-4)
+- "ip_collision_risk": string
+- "cyber_vulnerabilities": array of strings (2-3)
 - "red_flag_warnings": array of strings (0+ items, empty if sound)
 
 Respond with ONLY the JSON object."""
@@ -406,15 +414,16 @@ async def _mock_llm_response(context: str) -> dict:
             "ESS Inc. (NYSE: GWH)",
         ], k=random.randint(2, 3)),
         ip_defensibility_score=random.randint(45, 88),
-        security_vulnerabilities=random.sample([
-            "IoT sensor spoofing on battery management system (BMS) telemetry",
-            "Side-channel power analysis attacks on hardware encryption modules",
-            "SCADA/Modbus protocol vulnerabilities in grid-tie inverter control",
-            "Supply chain firmware tampering via unsigned OTA update channels",
-            "Man-in-the-middle attacks on cloud-based fleet monitoring API",
-            "Physical tamper risks on unshielded current/voltage sense lines",
-            "SQL injection vectors in pilot-line MES (Manufacturing Execution System)",
-        ], k=random.randint(2, 4)),
+        ip_collision_risk=random.choice([
+            "High collision risk with Tesla's 4680 cell tabless architecture.",
+            "Moderate risk regarding Panasonic's patent portfolio on solid-electrolyte interfaces.",
+            "Low risk, highly novel and distinct architectural approach."
+        ]),
+        cyber_vulnerabilities=random.sample([
+            "BMS firmware susceptible to malicious OTA injection leading to overcharge.",
+            "Lack of encrypted telemetry in grid IoT spoofing vectors.",
+            "Side-channel power analysis attacks on hardware encryption modules."
+        ], k=random.randint(2, 3)),
         red_flag_warnings=[],  # Sound science — no red flags in fallback
     )
     return metrics.model_dump()

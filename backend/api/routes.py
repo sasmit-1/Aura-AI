@@ -90,7 +90,7 @@ async def upload_pitch_deck(
     key_strengths_json = json.dumps(metrics.get("key_strengths", []))
     critical_risks_json = json.dumps(metrics.get("critical_risks", []))
     competitor_landscape_json = json.dumps(metrics.get("competitor_landscape", []))
-    security_vulnerabilities_json = json.dumps(metrics.get("security_vulnerabilities", []))
+    cyber_vulnerabilities_json = json.dumps(metrics.get("cyber_vulnerabilities", []))
     red_flag_warnings_json = json.dumps(metrics.get("red_flag_warnings", []))
 
     # --- Create the project ---
@@ -114,7 +114,8 @@ async def upload_pitch_deck(
         smart_milestone=metrics.get("smart_milestone"),
         competitor_landscape=competitor_landscape_json,
         ip_defensibility_score=metrics.get("ip_defensibility_score"),
-        security_vulnerabilities=security_vulnerabilities_json,
+        ip_collision_risk=metrics.get("ip_collision_risk"),
+        cyber_vulnerabilities=cyber_vulnerabilities_json,
         red_flag_warnings=red_flag_warnings_json,
         status="analyzed",
     )

@@ -9,8 +9,12 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI, WebSocket, WebSocketDisconnect
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
+from pydantic import BaseModel
+from fastapi import HTTPException, Depends
+from sqlalchemy.orm import Session
 
-from database.models import init_db
+from database.models import init_db, get_db, Project
+from services.rag_engine import client
 
 
 # ---------------------------------------------------------------------------
@@ -104,6 +108,37 @@ async def websocket_endpoint(websocket: WebSocket):
 
 from api.routes import router as api_router        # noqa: E402
 app.include_router(api_router, prefix="/api")
+
+# ---------------------------------------------------------------------------
+# POST /api/ask_aura — Token-Saver RAG Chat
+# ---------------------------------------------------------------------------
+
+class AskAuraRequest(BaseModel):
+    project_id: int
+    question: str
+
+@app.post("/api/ask_aura")
+async def ask_aura(payload: AskAuraRequest, db: Session = Depends(get_db)):
+    project = db.query(Project).filter(Project.id == payload.project_id).first()
+    if not project:
+        raise HTTPException(status_code=404, detail="Project not found")
+
+    project_json = json.dumps(project.to_dict())
+    
+    prompt = f"You are Aura AI. Answer the user's question based ONLY on this project data: {project_json}. Keep the answer to 1-2 short sentences.\nQuestion: {payload.question}"
+    
+    try:
+        response = await client.chat.completions.create(
+            model="llama-3.3-70b-versatile",
+            messages=[{"role": "system", "content": prompt}],
+            temperature=0.2,
+            max_tokens=200,
+        )
+        answer = response.choices[0].message.content.strip()
+    except Exception as e:
+        answer = "I'm sorry, I'm having trouble connecting to my knowledge base right now."
+        
+    return {"answer": answer}
 
 
 # ---------------------------------------------------------------------------
