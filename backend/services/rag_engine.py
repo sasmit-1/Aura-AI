@@ -24,7 +24,7 @@ load_dotenv()  # pulls GROQ_API_KEY from .env
 
 GROQ_API_KEY = os.getenv(
     "GROQ_API_KEY",
-    "insert your api key here",
+    "INSERT API KEY HERE",
 )
 
 client = AsyncGroq(api_key=GROQ_API_KEY)

@@ -8,6 +8,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/styles.css">
     <script>
         tailwind.config = {
             theme: {
@@ -16,11 +17,11 @@
                     colors: {
                         aura: {
                             black: '#000000',
-                            surface: '#0a0a0a',
-                            card: '#111111',
-                            border: '#1a1a1a',
-                            dim: '#333333',
-                            muted: '#737373',
+                            surface: '#050508',
+                            card: '#0a0a0f',
+                            border: 'rgba(255,255,255,0.06)',
+                            dim: '#2a2a35',
+                            muted: '#6b6b80',
                             green: '#00ff88',
                             'green-dim': '#00cc6a',
                             cyan: '#00d4ff',
@@ -33,16 +34,7 @@
         }
     </script>
     <style>
-        body { background: #000; }
-
-        /* Subtle background glow */
-        .auth-glow {
-            background:
-                radial-gradient(ellipse 50% 40% at 50% 30%, rgba(0,255,136,0.04) 0%, transparent 60%),
-                radial-gradient(ellipse 40% 30% at 70% 70%, rgba(0,212,255,0.03) 0%, transparent 50%);
-        }
-
-        /* Grid background */
+        /* ── Auth-specific styles ── */
         .grid-bg {
             background-image:
                 linear-gradient(rgba(0,255,136,0.015) 1px, transparent 1px),
@@ -50,169 +42,250 @@
             background-size: 80px 80px;
         }
 
-        /* Tab active states */
-        .tab-btn {
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-        .tab-btn.active-founder {
-            background: rgba(0,255,136,0.1);
-            border-color: rgba(0,255,136,0.4);
-            color: #00ff88;
-            box-shadow: 0 0 20px rgba(0,255,136,0.1);
-        }
-        .tab-btn.active-investor {
-            background: rgba(0,212,255,0.1);
-            border-color: rgba(0,212,255,0.4);
-            color: #00d4ff;
-            box-shadow: 0 0 20px rgba(0,212,255,0.1);
+        /* Auth card wrap (Static border) */
+        .auth-card-wrap {
+            position: relative;
+            border-radius: 24px;
+            padding: 1px;
+            background: rgba(255,255,255,0.08);
+            overflow: hidden;
         }
 
-        /* Card glow */
-        .auth-card {
-            box-shadow: 0 0 80px rgba(0,0,0,0.8), 0 0 40px rgba(0,255,136,0.03);
-            transition: box-shadow 0.5s ease;
-        }
-        .auth-card.mode-investor {
-            box-shadow: 0 0 80px rgba(0,0,0,0.8), 0 0 40px rgba(0,212,255,0.04);
-        }
-
-        /* Submit button dynamic color */
-        .submit-btn-founder {
-            background: #00ff88;
-            color: #000;
-        }
-        .submit-btn-founder:hover {
-            background: #00cc6a;
-            box-shadow: 0 0 30px rgba(0,255,136,0.3);
-        }
-        .submit-btn-investor {
-            background: #00d4ff;
-            color: #000;
-        }
-        .submit-btn-investor:hover {
-            background: #00b8d9;
-            box-shadow: 0 0 30px rgba(0,212,255,0.3);
+        .auth-card-inner {
+            background: rgba(8, 8, 14, 0.97);
+            border-radius: 22.5px;
+            padding: 2.5rem;
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            position: relative;
+            z-index: 1;
         }
 
-        /* Fade in */
-        @keyframes fadeUp {
+        /* Fade in animation for the card */
+        .auth-fade-in {
+            animation: authFadeUp 0.7s ease-out 0.15s forwards;
+            opacity: 0;
+        }
+        @keyframes authFadeUp {
             from { opacity: 0; transform: translateY(20px); }
             to { opacity: 1; transform: translateY(0); }
         }
-        .fade-up { animation: fadeUp 0.6s ease-out forwards; }
-        .fade-up-delay { animation: fadeUp 0.6s ease-out 0.15s forwards; opacity: 0; }
 
-        /* Input focus style */
-        input:focus {
-            border-color: rgba(0,255,136,0.4) !important;
-            box-shadow: 0 0 0 3px rgba(0,255,136,0.08);
+        /* Tab styling */
+        .tab-btn {
+            position: relative;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            overflow: hidden;
         }
-        .mode-investor input:focus {
-            border-color: rgba(0,212,255,0.4) !important;
-            box-shadow: 0 0 0 3px rgba(0,212,255,0.08);
+        .tab-btn::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: inherit;
+            opacity: 0;
+            transition: opacity 0.4s;
+        }
+        .tab-btn.active-founder {
+            border-color: rgba(0,255,136,0.4);
+            color: #00ff88;
+            background: rgba(0,255,136,0.08);
+            box-shadow: 0 0 25px rgba(0,255,136,0.1), inset 0 0 15px rgba(0,255,136,0.03);
+        }
+        .tab-btn.active-investor {
+            border-color: rgba(0,212,255,0.4);
+            color: #00d4ff;
+            background: rgba(0,212,255,0.08);
+            box-shadow: 0 0 25px rgba(0,212,255,0.1), inset 0 0 15px rgba(0,212,255,0.03);
+        }
+
+        /* Investor mode accent override */
+        .mode-investor { --accent-color: #00d4ff; --accent-secondary: #a855f7; }
+        .mode-investor .aura-input:focus {
+            border-color: rgba(0,212,255,0.4);
+            box-shadow: 0 0 0 4px rgba(0,212,255,0.06), 0 0 20px rgba(0,212,255,0.05);
+        }
+
+        /* Submit button styles */
+        .submit-btn {
+            position: relative;
+            overflow: hidden;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .submit-btn::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background: rgba(255,255,255,0.1);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+        .submit-btn:hover::before {
+            width: 300px;
+            height: 300px;
+        }
+        .submit-btn-founder {
+            background: linear-gradient(135deg, #00ff88, #00cc6a);
+            color: #000;
+            box-shadow: 0 0 30px rgba(0,255,136,0.2);
+        }
+        .submit-btn-founder:hover {
+            box-shadow: 0 0 50px rgba(0,255,136,0.35);
+            transform: translateY(-2px);
+        }
+        .submit-btn-investor {
+            background: linear-gradient(135deg, #00d4ff, #00b8d9);
+            color: #000;
+            box-shadow: 0 0 30px rgba(0,212,255,0.2);
+        }
+        .submit-btn-investor:hover {
+            box-shadow: 0 0 50px rgba(0,212,255,0.35);
+            transform: translateY(-2px);
+        }
+
+        /* Loading spinner */
+        .spinner {
+            display: inline-block;
+            width: 18px;
+            height: 18px;
+            border: 2px solid rgba(0,0,0,0.2);
+            border-top-color: #000;
+            border-radius: 50%;
+            animation: spin-slow 0.6s linear infinite;
+        }
+
+        /* Success checkmark */
+        @keyframes checkDraw {
+            to { stroke-dashoffset: 0; }
+        }
+        .success-check {
+            stroke-dasharray: 30;
+            stroke-dashoffset: 30;
+            animation: checkDraw 0.4s ease-out 0.2s forwards;
         }
     </style>
 </head>
-<body class="bg-black text-white font-sans min-h-screen antialiased auth-glow grid-bg">
+<body class="bg-black text-white font-sans min-h-screen antialiased grid-bg">
 
-    <!-- Nav -->
-    <nav class="fixed top-0 w-full z-50 bg-black/70 backdrop-blur-xl border-b border-aura-border">
+    <!-- ═══ Particle Canvas ═══ -->
+    <canvas id="particle-canvas"></canvas>
+
+    <!-- ═══ Aurora Background ═══ -->
+    <div class="aurora-bg" id="aurora-bg">
+        <div class="aurora-orb w-[500px] h-[500px] bg-aura-green/[0.05] top-[5%] left-[20%]" style="animation-delay: 0s;"></div>
+        <div class="aurora-orb w-[400px] h-[400px] bg-aura-cyan/[0.04] bottom-[15%] right-[20%]" style="animation-delay: -3s;"></div>
+        <div class="aurora-orb w-[300px] h-[300px] bg-purple-500/[0.03] top-[50%] left-[60%]" style="animation-delay: -6s;"></div>
+    </div>
+
+    <!-- ═══ Navigation ═══ -->
+    <nav class="glass-nav fixed top-0 w-full z-50">
         <div class="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
             <a href="/landing.html" class="flex items-center gap-3 group">
-                <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-aura-green/20 to-aura-cyan/20 border border-aura-green/30 flex items-center justify-center">
+                <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-aura-green/15 to-aura-cyan/10 border border-aura-green/25 flex items-center justify-center group-hover:border-aura-green/50 group-hover:shadow-[0_0_20px_rgba(0,255,136,0.15)] transition-all duration-500">
                     <span class="text-aura-green font-bold text-sm">A</span>
                 </div>
                 <span class="text-white font-semibold tracking-tight">Aura <span class="text-aura-muted font-normal">AI</span></span>
             </a>
-            <a href="/landing.html" class="text-sm text-aura-muted hover:text-white transition-colors">← Back to Home</a>
+            <a href="/landing.html" class="text-sm text-aura-muted hover:text-white transition-colors duration-300 flex items-center gap-2">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
+                Back to Home
+            </a>
         </div>
     </nav>
 
-    <!-- Auth Card -->
-    <main class="min-h-screen flex items-center justify-center px-6 pt-16">
+    <!-- ═══ Auth Card ═══ -->
+    <main class="min-h-screen flex items-center justify-center px-6 pt-16 relative z-10">
         <div class="w-full max-w-md">
 
             <!-- Header -->
             <div class="text-center mb-8 fade-up">
-                <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-aura-green/8 border border-aura-green/20 text-aura-green text-xs font-medium mb-5">
-                    <span class="w-1.5 h-1.5 rounded-full bg-aura-green animate-pulse"></span>
+                <div class="inline-flex items-center gap-2.5 px-4 py-2 rounded-full bg-aura-green/[0.08] border border-aura-green/20 text-aura-green text-xs font-medium mb-6">
+                    <span class="relative flex h-2 w-2">
+                        <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-aura-green opacity-75"></span>
+                        <span class="relative inline-flex rounded-full h-2 w-2 bg-aura-green"></span>
+                    </span>
                     SECURE ACCESS
                 </div>
-                <h1 class="text-3xl font-bold tracking-tight mb-2">Welcome to Aura AI</h1>
+                <h1 class="text-3xl sm:text-4xl font-bold tracking-tight mb-3">Welcome to Aura AI</h1>
                 <p class="text-aura-muted text-sm">Sign in to access the Climate Capital Operating System</p>
             </div>
 
-            <!-- Card -->
-            <div id="auth-card" class="auth-card bg-aura-card border border-aura-border rounded-2xl p-8 fade-up-delay">
+            <!-- Animated Gradient Border Card -->
+            <div id="auth-card-wrap" class="auth-card-wrap auth-fade-in">
+                <div class="auth-card-inner" id="auth-card">
 
-                <!-- Role Tabs -->
-                <div class="flex gap-3 mb-8">
-                    <button id="tab-founder" type="button"
-                        class="tab-btn flex-1 py-3 px-4 rounded-xl border border-aura-border text-sm font-medium text-aura-muted flex items-center justify-center gap-2 hover:text-white"
-                        onclick="setRole('founder')">
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
-                        </svg>
-                        Founder
-                    </button>
-                    <button id="tab-investor" type="button"
-                        class="tab-btn flex-1 py-3 px-4 rounded-xl border border-aura-border text-sm font-medium text-aura-muted flex items-center justify-center gap-2 hover:text-white"
-                        onclick="setRole('investor')">
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/>
-                        </svg>
-                        Investor
-                    </button>
-                </div>
-
-                <!-- Form -->
-                <form id="auth-form" class="space-y-5">
-                    <!-- Email -->
-                    <div>
-                        <label for="email" class="block text-sm font-medium text-aura-muted mb-2">Email</label>
-                        <input type="email" id="email" name="email" placeholder="you@company.com" required
-                            class="w-full px-4 py-3 bg-aura-surface border border-aura-border rounded-xl text-white placeholder-aura-dim focus:outline-none transition-all">
+                    <!-- Role Tabs -->
+                    <div class="flex gap-3 mb-8">
+                        <button id="tab-founder" type="button"
+                            class="tab-btn flex-1 py-3.5 px-4 rounded-xl border border-white/[0.06] text-sm font-medium text-aura-muted flex items-center justify-center gap-2.5 hover:text-white"
+                            onclick="setRole('founder')">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                            </svg>
+                            Founder
+                        </button>
+                        <button id="tab-investor" type="button"
+                            class="tab-btn flex-1 py-3.5 px-4 rounded-xl border border-white/[0.06] text-sm font-medium text-aura-muted flex items-center justify-center gap-2.5 hover:text-white"
+                            onclick="setRole('investor')">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/>
+                            </svg>
+                            Investor
+                        </button>
                     </div>
 
-                    <!-- Password -->
-                    <div>
-                        <label for="password" class="block text-sm font-medium text-aura-muted mb-2">Password</label>
-                        <input type="password" id="password" name="password" placeholder="••••••••" required
-                            class="w-full px-4 py-3 bg-aura-surface border border-aura-border rounded-xl text-white placeholder-aura-dim focus:outline-none transition-all">
+                    <!-- Form -->
+                    <form id="auth-form" class="space-y-5">
+                        <!-- Email -->
+                        <div>
+                            <label for="email" class="block text-sm font-medium text-aura-muted mb-2">Email</label>
+                            <input type="email" id="email" name="email" placeholder="you@company.com" required
+                                class="aura-input">
+                        </div>
+
+                        <!-- Password -->
+                        <div>
+                            <label for="password" class="block text-sm font-medium text-aura-muted mb-2">Password</label>
+                            <input type="password" id="password" name="password" placeholder="••••••••" required
+                                class="aura-input">
+                        </div>
+
+                        <!-- Submit -->
+                        <button type="submit" id="submit-btn"
+                            class="submit-btn w-full py-4 font-semibold rounded-xl text-sm submit-btn-founder">
+                            <span id="submit-text">Sign In as Founder</span>
+                        </button>
+                    </form>
+
+                    <!-- Divider -->
+                    <div class="flex items-center gap-4 my-7">
+                        <div class="flex-1 h-px bg-white/[0.06]"></div>
+                        <span class="text-aura-dim text-xs">or</span>
+                        <div class="flex-1 h-px bg-white/[0.06]"></div>
                     </div>
 
-                    <!-- Submit -->
-                    <button type="submit" id="submit-btn"
-                        class="w-full py-4 font-semibold rounded-xl transition-all duration-300 text-sm submit-btn-founder">
-                        Sign In as Founder
+                    <!-- Demo Access -->
+                    <button type="button" id="demo-btn" onclick="demoLogin()"
+                        class="w-full py-3.5 bg-white/[0.03] border border-white/[0.06] rounded-xl text-aura-muted text-sm font-medium hover:border-aura-green/30 hover:text-white hover:bg-white/[0.05] transition-all duration-300">
+                        🚀 Skip to Demo
                     </button>
-                </form>
 
-                <!-- Divider -->
-                <div class="flex items-center gap-4 my-6">
-                    <div class="flex-1 h-px bg-aura-border"></div>
-                    <span class="text-aura-dim text-xs">or</span>
-                    <div class="flex-1 h-px bg-aura-border"></div>
+                    <!-- Footer text -->
+                    <p class="text-center text-aura-dim text-xs mt-7 leading-relaxed">
+                        By signing in you agree to our Terms of Service.
+                        <br>This is a hackathon demo — no real authentication.
+                    </p>
                 </div>
-
-                <!-- Demo Access -->
-                <button type="button" id="demo-btn" onclick="demoLogin()"
-                    class="w-full py-3 bg-aura-surface border border-aura-border rounded-xl text-aura-muted text-sm font-medium hover:border-aura-green/30 hover:text-white transition-all">
-                    🚀 Skip to Demo
-                </button>
-
-                <!-- Footer text -->
-                <p class="text-center text-aura-dim text-xs mt-6">
-                    By signing in you agree to our Terms of Service.
-                    <br>This is a hackathon demo — no real authentication.
-                </p>
             </div>
 
         </div>
     </main>
 
-    <!-- Footer -->
-    <footer class="border-t border-aura-border py-8 mt-12">
+    <!-- ═══ Footer ═══ -->
+    <footer class="border-t border-white/[0.05] py-8 mt-12 relative z-10">
         <div class="max-w-7xl mx-auto px-6 flex items-center justify-between">
             <p class="text-aura-dim text-sm">© 2026 Aura AI — Climate Capital Operating System</p>
             <p class="text-aura-dim text-xs font-mono">v0.1.0</p>
@@ -220,82 +293,184 @@
     </footer>
 
     <script>
-        // ── State ──
-        let currentRole = "founder";
+    (function() {
+        'use strict';
 
-        // ── Read role from URL query param ──
-        const params = new URLSearchParams(window.location.search);
-        const urlRole = params.get("role");
-        if (urlRole === "investor" || urlRole === "founder") {
-            currentRole = urlRole;
+        // ──────────────────────────────────────────────
+        // PARTICLE CANVAS (shared with landing)
+        // ──────────────────────────────────────────────
+        const canvas = document.getElementById('particle-canvas');
+        const ctx = canvas.getContext('2d');
+        let particles = [];
+        let mouse = { x: null, y: null };
+        const PARTICLE_COUNT = 50;
+        const CONNECTION_DIST = 130;
+        const MOUSE_RADIUS = 180;
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        resizeCanvas();
+        window.addEventListener('resize', resizeCanvas);
+        document.addEventListener('mousemove', (e) => { mouse.x = e.clientX; mouse.y = e.clientY; });
+        document.addEventListener('mouseleave', () => { mouse.x = null; mouse.y = null; });
+
+        class Particle {
+            constructor() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.vx = (Math.random() - 0.5) * 0.4;
+                this.vy = (Math.random() - 0.5) * 0.4;
+                this.radius = Math.random() * 1.5 + 0.5;
+                this.baseAlpha = Math.random() * 0.35 + 0.1;
+                this.alpha = this.baseAlpha;
+                const colors = ['0,255,136', '0,212,255', '168,85,247'];
+                this.color = colors[Math.floor(Math.random() * colors.length)];
+            }
+            update() {
+                this.x += this.vx;
+                this.y += this.vy;
+                if (this.x < 0) this.x = canvas.width;
+                if (this.x > canvas.width) this.x = 0;
+                if (this.y < 0) this.y = canvas.height;
+                if (this.y > canvas.height) this.y = 0;
+                if (mouse.x !== null) {
+                    const dx = this.x - mouse.x, dy = this.y - mouse.y;
+                    const dist = Math.sqrt(dx * dx + dy * dy);
+                    if (dist < MOUSE_RADIUS) {
+                        const force = (MOUSE_RADIUS - dist) / MOUSE_RADIUS;
+                        this.x += dx * force * 0.015;
+                        this.y += dy * force * 0.015;
+                        this.alpha = this.baseAlpha + force * 0.35;
+                    } else {
+                        this.alpha += (this.baseAlpha - this.alpha) * 0.05;
+                    }
+                }
+            }
+            draw() {
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+                ctx.fillStyle = `rgba(${this.color}, ${this.alpha})`;
+                ctx.fill();
+            }
         }
 
-        // ── DOM refs ──
-        const tabFounder = document.getElementById("tab-founder");
-        const tabInvestor = document.getElementById("tab-investor");
-        const submitBtn = document.getElementById("submit-btn");
-        const authCard = document.getElementById("auth-card");
-        const authForm = document.getElementById("auth-form");
+        for (let i = 0; i < PARTICLE_COUNT; i++) particles.push(new Particle());
 
-        // ── Set active role ──
+        function drawConnections() {
+            for (let i = 0; i < particles.length; i++) {
+                for (let j = i + 1; j < particles.length; j++) {
+                    const dx = particles[i].x - particles[j].x;
+                    const dy = particles[i].y - particles[j].y;
+                    const dist = Math.sqrt(dx * dx + dy * dy);
+                    if (dist < CONNECTION_DIST) {
+                        const alpha = (1 - dist / CONNECTION_DIST) * 0.1;
+                        ctx.beginPath();
+                        ctx.moveTo(particles[i].x, particles[i].y);
+                        ctx.lineTo(particles[j].x, particles[j].y);
+                        ctx.strokeStyle = `rgba(0, 255, 136, ${alpha})`;
+                        ctx.lineWidth = 0.5;
+                        ctx.stroke();
+                    }
+                }
+            }
+        }
+
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            particles.forEach(p => { p.update(); p.draw(); });
+            drawConnections();
+            requestAnimationFrame(animate);
+        }
+        animate();
+
+
+        // ──────────────────────────────────────────────
+        // AUTH LOGIC
+        // ──────────────────────────────────────────────
+        let currentRole = 'founder';
+
+        const params = new URLSearchParams(window.location.search);
+        const urlRole = params.get('role');
+        if (urlRole === 'investor' || urlRole === 'founder') currentRole = urlRole;
+
+        const tabFounder = document.getElementById('tab-founder');
+        const tabInvestor = document.getElementById('tab-investor');
+        const submitBtn = document.getElementById('submit-btn');
+        const submitText = document.getElementById('submit-text');
+        const authCard = document.getElementById('auth-card');
+        const authCardWrap = document.getElementById('auth-card-wrap');
+        const authForm = document.getElementById('auth-form');
+        const auroraBg = document.getElementById('aurora-bg');
+
         function setRole(role) {
             currentRole = role;
             updateUI();
         }
 
         function updateUI() {
-            // Reset both tabs
-            tabFounder.className = "tab-btn flex-1 py-3 px-4 rounded-xl border border-aura-border text-sm font-medium text-aura-muted flex items-center justify-center gap-2 hover:text-white";
-            tabInvestor.className = "tab-btn flex-1 py-3 px-4 rounded-xl border border-aura-border text-sm font-medium text-aura-muted flex items-center justify-center gap-2 hover:text-white";
+            // Reset tabs
+            const baseClass = 'tab-btn flex-1 py-3.5 px-4 rounded-xl border border-white/[0.06] text-sm font-medium text-aura-muted flex items-center justify-center gap-2.5 hover:text-white';
+            tabFounder.className = baseClass;
+            tabInvestor.className = baseClass;
 
-            if (currentRole === "founder") {
-                tabFounder.classList.add("active-founder");
-                submitBtn.textContent = "Sign In as Founder";
-                submitBtn.className = "w-full py-4 font-semibold rounded-xl transition-all duration-300 text-sm submit-btn-founder";
-                authCard.classList.remove("mode-investor");
+            if (currentRole === 'founder') {
+                tabFounder.classList.add('active-founder');
+                submitText.textContent = 'Sign In as Founder';
+                submitBtn.className = 'submit-btn w-full py-4 font-semibold rounded-xl text-sm submit-btn-founder';
+                authCard.classList.remove('mode-investor');
+                authCardWrap.classList.remove('mode-investor');
+                // Update aurora orb colors
+                auroraBg.children[0].className = 'aurora-orb w-[500px] h-[500px] bg-aura-green/[0.05] top-[5%] left-[20%]';
+                auroraBg.children[1].className = 'aurora-orb w-[400px] h-[400px] bg-aura-cyan/[0.04] bottom-[15%] right-[20%]';
             } else {
-                tabInvestor.classList.add("active-investor");
-                submitBtn.textContent = "Sign In as Investor";
-                submitBtn.className = "w-full py-4 font-semibold rounded-xl transition-all duration-300 text-sm submit-btn-investor";
-                authCard.classList.add("mode-investor");
+                tabInvestor.classList.add('active-investor');
+                submitText.textContent = 'Sign In as Investor';
+                submitBtn.className = 'submit-btn w-full py-4 font-semibold rounded-xl text-sm submit-btn-investor';
+                authCard.classList.add('mode-investor');
+                authCardWrap.classList.add('mode-investor');
+                // Shift aurora to cyan/purple
+                auroraBg.children[0].className = 'aurora-orb w-[500px] h-[500px] bg-aura-cyan/[0.05] top-[5%] left-[20%]';
+                auroraBg.children[1].className = 'aurora-orb w-[400px] h-[400px] bg-purple-500/[0.04] bottom-[15%] right-[20%]';
             }
         }
 
-        // ── Form submission — redirect based on role ──
-        authForm.addEventListener("submit", (e) => {
+        // Form submission with animated states
+        authForm.addEventListener('submit', (e) => {
             e.preventDefault();
-
-            // Animate button
             submitBtn.disabled = true;
-            submitBtn.textContent = "Authenticating...";
-            submitBtn.style.opacity = "0.6";
+            submitText.innerHTML = '<span class="spinner"></span>';
+            submitBtn.style.opacity = '0.85';
 
             setTimeout(() => {
-                if (currentRole === "founder") {
-                    window.location.href = "/founder.html";
-                } else {
-                    window.location.href = "/index.html";
-                }
-            }, 800);
+                // Show success checkmark
+                submitText.innerHTML = `
+                    <svg class="w-5 h-5 inline-block" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+                        <path class="success-check" stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/>
+                    </svg>
+                `;
+                setTimeout(() => {
+                    window.location.href = currentRole === 'founder' ? '/founder.html' : '/index.html';
+                }, 600);
+            }, 900);
         });
 
-        // ── Demo login — skip straight in ──
-        function demoLogin() {
-            const demoBtn = document.getElementById("demo-btn");
-            demoBtn.textContent = "Launching demo...";
+        // Demo login
+        window.demoLogin = function() {
+            const demoBtn = document.getElementById('demo-btn');
+            demoBtn.innerHTML = '<span class="spinner" style="border-top-color: #6b6b80; border-color: rgba(255,255,255,0.1);"></span>';
             demoBtn.disabled = true;
 
             setTimeout(() => {
-                if (currentRole === "founder") {
-                    window.location.href = "/founder.html";
-                } else {
-                    window.location.href = "/index.html";
-                }
-            }, 600);
-        }
+                window.location.href = currentRole === 'founder' ? '/founder.html' : '/index.html';
+            }, 700);
+        };
 
-        // ── Init ──
+        // Init
         updateUI();
+
+    })();
     </script>
 
 </body>

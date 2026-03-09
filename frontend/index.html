@@ -29,11 +29,11 @@
             colors: {
               aura: {
                 black: "#000000",
-                surface: "#0a0a0a",
-                card: "#111111",
-                border: "#1a1a1a",
-                dim: "#333333",
-                muted: "#737373",
+                surface: "#050508",
+                card: "#0a0a0f",
+                border: "rgba(255,255,255,0.06)",
+                dim: "#2a2a35",
+                muted: "#6b6b80",
                 green: "#00ff88",
                 "green-dim": "#00cc6a",
                 cyan: "#00d4ff",
@@ -46,161 +46,80 @@
       };
     </script>
     <style>
-      body {
-        background: #000;
-      }
+      body { background: #000; }
       /* Hero gradient overlay */
       .hero-gradient {
         background:
-          radial-gradient(
-            ellipse at 50% 0%,
-            rgba(0, 255, 136, 0.06) 0%,
-            transparent 60%
-          ),
-          radial-gradient(
-            ellipse at 80% 50%,
-            rgba(0, 212, 255, 0.04) 0%,
-            transparent 50%
-          );
+          radial-gradient(ellipse at 50% 0%, rgba(0,255,136,0.06) 0%, transparent 60%),
+          radial-gradient(ellipse at 80% 50%, rgba(0,212,255,0.04) 0%, transparent 50%);
       }
       /* Score ring */
       .score-ring {
-        background: conic-gradient(
-          var(--score-color) calc(var(--score) * 1%),
-          #1a1a1a calc(var(--score) * 1%)
-        );
+        background: conic-gradient(var(--score-color) calc(var(--score) * 1%), rgba(255,255,255,0.06) calc(var(--score) * 1%));
       }
       /* Card hover */
       .deal-card {
-        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        background: rgba(10,10,18,0.5);
+        backdrop-filter: blur(12px);
+        border: 1px solid rgba(255,255,255,0.06);
+        border-radius: 20px;
       }
       .deal-card:hover {
-        border-color: rgba(0, 255, 136, 0.3);
-        transform: translateY(-4px);
-        box-shadow:
-          0 20px 60px rgba(0, 0, 0, 0.5),
-          0 0 40px rgba(0, 255, 136, 0.05);
+        border-color: rgba(0,255,136,0.25);
+        transform: translateY(-6px);
+        box-shadow: 0 20px 60px rgba(0,0,0,0.4), 0 0 40px rgba(0,255,136,0.04);
+        background: rgba(10,10,18,0.65);
       }
       /* Glow effects */
-      .glow-green {
-        box-shadow: 0 0 30px rgba(0, 255, 136, 0.15);
-      }
+      .glow-green { box-shadow: 0 0 30px rgba(0,255,136,0.15); }
       /* Escrow badge transitions */
-      .escrow-badge {
-        transition: all 0.5s ease;
-      }
-      .escrow-locked {
-        background: rgba(255, 184, 0, 0.1);
-        border-color: rgba(255, 184, 0, 0.3);
-        color: #ffb800;
-      }
-      .escrow-disbursed {
-        background: rgba(0, 255, 136, 0.1);
-        border-color: rgba(0, 255, 136, 0.3);
-        color: #00ff88;
-      }
+      .escrow-badge { transition: all 0.5s ease; }
+      .escrow-locked { background: rgba(255,184,0,0.1); border-color: rgba(255,184,0,0.3); color: #ffb800; }
+      .escrow-disbursed { background: rgba(0,255,136,0.1); border-color: rgba(0,255,136,0.3); color: #00ff88; }
       /* Flash animation for WebSocket updates */
       @keyframes flash-green {
-        0% {
-          box-shadow: 0 0 0 rgba(0, 255, 136, 0);
-        }
-        30% {
-          box-shadow:
-            0 0 60px rgba(0, 255, 136, 0.4),
-            inset 0 0 30px rgba(0, 255, 136, 0.05);
-        }
-        100% {
-          box-shadow: 0 0 0 rgba(0, 255, 136, 0);
-        }
+        0% { box-shadow: 0 0 0 rgba(0,255,136,0); }
+        30% { box-shadow: 0 0 60px rgba(0,255,136,0.4), inset 0 0 30px rgba(0,255,136,0.05); }
+        100% { box-shadow: 0 0 0 rgba(0,255,136,0); }
       }
-      .flash-update {
-        animation: flash-green 1.5s ease-out;
-      }
+      .flash-update { animation: flash-green 1.5s ease-out; }
       /* Stat counter animation */
       @keyframes countIn {
-        from {
-          opacity: 0;
-          transform: translateY(10px);
-        }
-        to {
-          opacity: 1;
-          transform: translateY(0);
-        }
+        from { opacity: 0; transform: translateY(10px); }
+        to { opacity: 1; transform: translateY(0); }
       }
-      .stat-value {
-        animation: countIn 0.6s ease-out forwards;
-      }
-      /* Fade animations */
-      @keyframes fadeUp {
-        from {
-          opacity: 0;
-          transform: translateY(20px);
-        }
-        to {
-          opacity: 1;
-          transform: translateY(0);
-        }
-      }
-      .fade-up {
-        animation: fadeUp 0.6s ease-out forwards;
-      }
+      .stat-value { animation: countIn 0.6s ease-out forwards; }
       /* Three.js canvas */
-      #three-canvas {
-        position: absolute;
-        inset: 0;
-        z-index: 0;
-      }
+      #three-canvas { position: absolute; inset: 0; z-index: 0; }
       /* Grid lines background */
       .grid-bg {
         background-image:
-          linear-gradient(rgba(0, 255, 136, 0.03) 1px, transparent 1px),
-          linear-gradient(90deg, rgba(0, 255, 136, 0.03) 1px, transparent 1px);
-        background-size: 60px 60px;
+          linear-gradient(rgba(0,255,136,0.02) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(0,255,136,0.02) 1px, transparent 1px);
+        background-size: 80px 80px;
       }
     </style>
   </head>
-  <body class="bg-aura-black text-white font-sans min-h-screen antialiased">
+  <body class="bg-black text-white font-sans min-h-screen antialiased">
     <!-- Nav -->
-    <nav
-      class="fixed top-0 w-full z-50 bg-aura-black/80 backdrop-blur-xl border-b border-aura-border"
-    >
-      <div
-        class="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between"
-      >
+    <nav class="glass-nav fixed top-0 w-full z-50">
+      <div class="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
         <div class="flex items-center gap-3">
-          <div
-            class="w-8 h-8 rounded-lg bg-gradient-to-br from-aura-green/20 to-aura-cyan/20 border border-aura-green/30 flex items-center justify-center"
-          >
+          <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-aura-green/15 to-aura-cyan/10 border border-aura-green/25 flex items-center justify-center">
             <span class="text-aura-green font-bold text-sm">A</span>
           </div>
-          <span class="text-white font-semibold tracking-tight"
-            >Aura <span class="text-aura-muted font-normal">AI</span></span
-          >
-          <span
-            class="hidden sm:inline-block text-xs text-aura-dim font-mono ml-2 px-2 py-0.5 bg-aura-card rounded border border-aura-border"
-            >Climate Capital OS</span
-          >
+          <span class="text-white font-semibold tracking-tight">Aura <span class="text-aura-muted font-normal">AI</span></span>
+          <span class="hidden sm:inline-block text-[10px] text-aura-dim font-mono ml-2 px-2.5 py-1 bg-white/[0.03] rounded-lg border border-white/[0.06]">Climate Capital OS</span>
         </div>
         <div class="flex items-center gap-6">
-          <div
-            class="flex items-center gap-2 text-xs text-aura-muted"
-            id="ws-status"
-          >
+          <div class="flex items-center gap-2 text-xs text-aura-muted" id="ws-status">
             <span class="w-2 h-2 rounded-full bg-aura-dim" id="ws-dot"></span>
             <span id="ws-label">Connecting...</span>
           </div>
-          <a href="/index.html" class="text-sm text-aura-green font-medium"
-            >Dashboard</a
-          >
-          <a
-            href="/founder.html"
-            class="text-sm text-aura-muted hover:text-white transition-colors"
-            >Founder Portal</a
-          >
-          <a
-            href="/landing.html"
-            class="px-4 py-1.5 bg-aura-card border border-aura-border rounded-lg text-xs font-medium text-aura-muted hover:border-aura-red/40 hover:text-aura-red transition-all duration-300"
-          >
+          <a href="/index.html" class="text-sm text-aura-green font-medium">Dashboard</a>
+          <a href="/founder.html" class="text-sm text-aura-muted hover:text-white transition-colors duration-300">Founder Portal</a>
+          <a href="/landing.html" class="px-4 py-2 bg-white/[0.03] border border-white/[0.06] rounded-xl text-xs font-medium text-aura-muted hover:border-aura-red/40 hover:text-aura-red transition-all duration-300">
             Sign Out
           </a>
         </div>
@@ -208,78 +127,51 @@
     </nav>
 
     <!-- Hero Section with Three.js Canvas -->
-    <section
-      class="relative h-[420px] overflow-hidden hero-gradient border-b border-aura-border"
-    >
+    <section class="relative h-[420px] overflow-hidden hero-gradient border-b border-white/[0.05]">
       <canvas id="three-canvas"></canvas>
-      <div
-        class="relative z-10 h-full flex flex-col justify-center items-center text-center px-6"
-      >
-        <div
-          class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-aura-green/10 border border-aura-green/20 text-aura-green text-xs font-medium mb-6"
-        >
-          <span
-            class="w-1.5 h-1.5 rounded-full bg-aura-green animate-pulse"
-          ></span>
+      <!-- Aurora orbs -->
+      <div class="aurora-bg" style="opacity:0.5;">
+        <div class="aurora-orb w-[400px] h-[400px] bg-aura-green/[0.05] top-[-10%] left-[30%]" style="animation-delay:0s;"></div>
+        <div class="aurora-orb w-[300px] h-[300px] bg-aura-cyan/[0.04] bottom-[10%] right-[20%]" style="animation-delay:-3s;"></div>
+      </div>
+      <div class="relative z-10 h-full flex flex-col justify-center items-center text-center px-6">
+        <div class="inline-flex items-center gap-2.5 px-4 py-2 rounded-full bg-aura-green/[0.08] border border-aura-green/20 text-aura-green text-xs font-medium mb-6 fade-up">
+          <span class="relative flex h-2 w-2">
+            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-aura-green opacity-75"></span>
+            <span class="relative inline-flex rounded-full h-2 w-2 bg-aura-green"></span>
+          </span>
           LIVE DEAL MATRIX
         </div>
-        <h1 class="text-5xl md:text-6xl font-extrabold tracking-tight mb-4">
-          Climate Capital<br /><span
-            class="text-aura-green"
-            style="text-shadow: 0 0 40px rgba(0, 255, 136, 0.3)"
-            >Operating System</span
-          >
+        <h1 class="text-5xl md:text-6xl font-extrabold tracking-tight mb-4 fade-up-1">
+          Climate Capital<br/><span class="text-gradient-green text-glow-green">Operating System</span>
         </h1>
-        <p class="text-aura-muted text-lg max-w-lg">
-          AI-validated climate tech investments. Real-time escrow. Autonomous
-          verification.
+        <p class="text-aura-muted text-lg max-w-lg fade-up-2">
+          AI-validated climate tech investments. Real-time escrow. Autonomous verification.
         </p>
       </div>
       <!-- Gradient fade at bottom -->
-      <div
-        class="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-aura-black to-transparent z-10"
-      ></div>
+      <div class="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-black to-transparent z-10"></div>
     </section>
 
     <!-- Stats Bar -->
-    <section class="border-b border-aura-border bg-aura-surface/50">
+    <section class="border-b border-white/[0.05]" style="background: rgba(5,5,10,0.5);">
       <div class="max-w-7xl mx-auto px-6 py-6">
-        <div class="grid grid-cols-2 md:grid-cols-4 gap-6" id="stats-bar">
-          <div class="text-center">
-            <p
-              class="text-2xl font-bold text-white stat-value"
-              id="stat-projects"
-            >
-              0
-            </p>
-            <p class="text-xs text-aura-muted mt-1">Projects Analyzed</p>
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-5" id="stats-bar">
+          <div class="glass-card !rounded-xl p-4 text-center">
+            <p class="text-2xl font-bold text-white stat-value" id="stat-projects">0</p>
+            <p class="text-[11px] text-aura-muted mt-1 font-mono uppercase tracking-wider">Projects Analyzed</p>
           </div>
-          <div class="text-center">
-            <p
-              class="text-2xl font-bold text-aura-green stat-value"
-              id="stat-avg-score"
-            >
-              —
-            </p>
-            <p class="text-xs text-aura-muted mt-1">Avg. Feasibility</p>
+          <div class="glass-card !rounded-xl p-4 text-center">
+            <p class="text-2xl font-bold text-aura-green stat-value" id="stat-avg-score">—</p>
+            <p class="text-[11px] text-aura-muted mt-1 font-mono uppercase tracking-wider">Avg. Feasibility</p>
           </div>
-          <div class="text-center">
-            <p
-              class="text-2xl font-bold text-aura-amber stat-value"
-              id="stat-locked"
-            >
-              0
-            </p>
-            <p class="text-xs text-aura-muted mt-1">Escrows Locked</p>
+          <div class="glass-card !rounded-xl p-4 text-center">
+            <p class="text-2xl font-bold text-aura-amber stat-value" id="stat-locked">0</p>
+            <p class="text-[11px] text-aura-muted mt-1 font-mono uppercase tracking-wider">Escrows Locked</p>
           </div>
-          <div class="text-center">
-            <p
-              class="text-2xl font-bold text-aura-green stat-value"
-              id="stat-disbursed"
-            >
-              0
-            </p>
-            <p class="text-xs text-aura-muted mt-1">Funds Disbursed</p>
+          <div class="glass-card !rounded-xl p-4 text-center">
+            <p class="text-2xl font-bold text-aura-green stat-value" id="stat-disbursed">0</p>
+            <p class="text-[11px] text-aura-muted mt-1 font-mono uppercase tracking-wider">Funds Disbursed</p>
           </div>
         </div>
       </div>
@@ -370,11 +262,9 @@
     </section>
 
     <!-- Footer -->
-    <footer class="border-t border-aura-border py-8">
+    <footer class="border-t border-white/[0.05] py-8">
       <div class="max-w-7xl mx-auto px-6 flex items-center justify-between">
-        <p class="text-aura-dim text-sm">
-          © 2026 Aura AI — Climate Capital Operating System
-        </p>
+        <p class="text-aura-dim text-sm">© 2026 Aura AI — Climate Capital Operating System</p>
         <p class="text-aura-dim text-xs font-mono">v0.1.0</p>
       </div>
     </footer>
@@ -682,28 +572,15 @@
     </div>
 
     <!-- Live Global Ticker -->
-    <div
-      class="fixed bottom-0 w-full z-50 bg-[#0a0a0a] border-t border-aura-green/20 py-2"
-    >
-      <div class="ticker-container text-[0.85rem] font-mono">
+    <div class="fixed bottom-0 w-full z-50 py-2.5" style="background: rgba(5,5,10,0.85); backdrop-filter: blur(16px); border-top: 1px solid rgba(0,255,136,0.1);">
+      <div class="ticker-container text-[0.8rem] font-mono">
         <div class="ticker-content text-aura-green">
           <span class="mr-12">🟢 [DISBURSED] $2.4M to NextGen Solar Grid</span>
-          <span class="mr-12 text-amber-400"
-            >🟡 [ESCROW] $800k locked pending TRL-6 verification</span
-          >
-          <span class="mr-12 text-cyan-400"
-            >⚡ [SYSTEM] Groq LPU processing 42 active pitch decks</span
-          >
-          <span class="mr-12 text-red-400"
-            >🔴 [ALERT] Critical physics violation flagged in incoming seed
-            round</span
-          >
-          <span class="mr-12"
-            >🟢 [MILESTONE] EV-Battery Solid State Phase II Verified</span
-          >
-          <span class="mr-12 text-cyan-400"
-            >⚡ [ORACLE] Earth Engine API synching 12,041 datasets</span
-          >
+          <span class="mr-12 text-amber-400">🟡 [ESCROW] $800k locked pending TRL-6 verification</span>
+          <span class="mr-12 text-cyan-400">⚡ [SYSTEM] Groq LPU processing 42 active pitch decks</span>
+          <span class="mr-12 text-red-400">🔴 [ALERT] Critical physics violation flagged in incoming seed round</span>
+          <span class="mr-12">🟢 [MILESTONE] EV-Battery Solid State Phase II Verified</span>
+          <span class="mr-12 text-cyan-400">⚡ [ORACLE] Earth Engine API synching 12,041 datasets</span>
         </div>
       </div>
     </div>

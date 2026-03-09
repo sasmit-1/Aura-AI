@@ -17,11 +17,11 @@
                     colors: {
                         aura: {
                             black: '#000000',
-                            surface: '#0a0a0a',
-                            card: '#111111',
-                            border: '#1a1a1a',
-                            dim: '#333333',
-                            muted: '#737373',
+                            surface: '#050508',
+                            card: '#0a0a0f',
+                            border: 'rgba(255,255,255,0.06)',
+                            dim: '#2a2a35',
+                            muted: '#6b6b80',
                             green: '#00ff88',
                             'green-dim': '#00cc6a',
                             cyan: '#00d4ff',
@@ -36,25 +36,27 @@
     <style>
         body { background: #000; }
         /* Glow effects */
-        .glow-green { box-shadow: 0 0 30px rgba(0, 255, 136, 0.15), 0 0 60px rgba(0, 255, 136, 0.05); }
-        .glow-border { border-color: rgba(0, 255, 136, 0.3); }
-        .text-glow { text-shadow: 0 0 20px rgba(0, 255, 136, 0.5); }
+        .glow-green { box-shadow: 0 0 30px rgba(0,255,136,0.15), 0 0 60px rgba(0,255,136,0.05); }
+        .glow-border { border-color: rgba(0,255,136,0.3); }
+        .text-glow { text-shadow: 0 0 20px rgba(0,255,136,0.5); }
         /* Upload zone */
         .upload-zone {
-            border: 2px dashed #333;
-            transition: all 0.3s ease;
+            border: 2px dashed rgba(255,255,255,0.08);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            background: rgba(5,5,10,0.5);
+            backdrop-filter: blur(12px);
         }
         .upload-zone:hover, .upload-zone.drag-over {
             border-color: #00ff88;
-            background: rgba(0, 255, 136, 0.03);
-            box-shadow: 0 0 40px rgba(0, 255, 136, 0.08);
+            background: rgba(0,255,136,0.03);
+            box-shadow: 0 0 50px rgba(0,255,136,0.08), inset 0 0 30px rgba(0,255,136,0.02);
         }
         /* Pulse animation for loading */
-        @keyframes pulse-glow {
-            0%, 100% { opacity: 0.4; box-shadow: 0 0 20px rgba(0, 255, 136, 0.1); }
-            50% { opacity: 1; box-shadow: 0 0 40px rgba(0, 255, 136, 0.3); }
+        @keyframes pulse-loading {
+            0%, 100% { opacity: 0.4; box-shadow: 0 0 20px rgba(0,255,136,0.1); }
+            50% { opacity: 1; box-shadow: 0 0 40px rgba(0,255,136,0.3); }
         }
-        .pulse-loading { animation: pulse-glow 2s ease-in-out infinite; }
+        .pulse-loading { animation: pulse-loading 2s ease-in-out infinite; }
         /* Scan line animation */
         @keyframes scan {
             0% { transform: translateY(-100%); }
@@ -67,29 +69,52 @@
             background: linear-gradient(transparent 40%, rgba(0,255,136,0.06) 50%, transparent 60%);
             animation: scan 3s ease-in-out infinite;
         }
-        /* Fade-in */
-        @keyframes fadeUp {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
+        /* Form inputs */
+        .founder-input {
+            width: 100%;
+            padding: 14px 18px;
+            background: rgba(5,5,10,0.8);
+            border: 1px solid rgba(255,255,255,0.06);
+            border-radius: 14px;
+            color: #fff;
+            font-size: 14px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            outline: none;
         }
-        .fade-up { animation: fadeUp 0.6s ease-out forwards; }
-        .fade-up-delay { animation: fadeUp 0.6s ease-out 0.2s forwards; opacity: 0; }
+        .founder-input::placeholder { color: #2a2a35; }
+        .founder-input:focus {
+            border-color: rgba(0,255,136,0.4);
+            box-shadow: 0 0 0 4px rgba(0,255,136,0.06), 0 0 20px rgba(0,255,136,0.05);
+        }
+        /* grid bg */
+        .grid-bg {
+            background-image:
+                linear-gradient(rgba(0,255,136,0.015) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0,255,136,0.015) 1px, transparent 1px);
+            background-size: 80px 80px;
+        }
     </style>
 </head>
-<body class="bg-aura-black text-white font-sans min-h-screen antialiased">
+<body class="bg-black text-white font-sans min-h-screen antialiased grid-bg">
+
+    <!-- Aurora orbs -->
+    <div class="aurora-bg" style="opacity: 0.3;">
+        <div class="aurora-orb w-[400px] h-[400px] bg-aura-green/[0.04] top-[10%] left-[20%]" style="animation-delay: 0s;"></div>
+        <div class="aurora-orb w-[300px] h-[300px] bg-aura-cyan/[0.03] bottom-[20%] right-[20%]" style="animation-delay: -4s;"></div>
+    </div>
 
     <!-- Nav -->
-    <nav class="fixed top-0 w-full z-50 bg-aura-black/80 backdrop-blur-xl border-b border-aura-border">
+    <nav class="glass-nav fixed top-0 w-full z-50">
         <div class="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
             <a href="/index.html" class="flex items-center gap-3 group">
-                <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-aura-green/20 to-aura-cyan/20 border border-aura-green/30 flex items-center justify-center">
+                <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-aura-green/15 to-aura-cyan/10 border border-aura-green/25 flex items-center justify-center group-hover:border-aura-green/50 group-hover:shadow-[0_0_20px_rgba(0,255,136,0.15)] transition-all duration-500">
                     <span class="text-aura-green font-bold text-sm">A</span>
                 </div>
                 <span class="text-white font-semibold tracking-tight">Aura <span class="text-aura-muted font-normal">AI</span></span>
             </a>
             <div class="flex items-center gap-6">
                 <a href="/founder.html" class="text-sm text-aura-green font-medium">Founder Portal</a>
-                <a href="/landing.html" class="px-4 py-1.5 bg-aura-card border border-aura-border rounded-lg text-xs font-medium text-aura-muted hover:border-aura-red/40 hover:text-aura-red transition-all duration-300">
+                <a href="/landing.html" class="px-4 py-2 bg-white/[0.03] border border-white/[0.06] rounded-xl text-xs font-medium text-aura-muted hover:border-aura-red/40 hover:text-aura-red transition-all duration-300">
                     Sign Out
                 </a>
             </div>
@@ -97,17 +122,20 @@
     </nav>
 
     <!-- Main -->
-    <main class="pt-32 pb-20 px-6">
+    <main class="pt-32 pb-20 px-6 relative z-10">
         <div class="max-w-2xl mx-auto">
 
             <!-- Header -->
             <div class="text-center mb-12 fade-up">
-                <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-aura-green/10 border border-aura-green/20 text-aura-green text-xs font-medium mb-6">
-                    <span class="w-1.5 h-1.5 rounded-full bg-aura-green animate-pulse"></span>
+                <div class="inline-flex items-center gap-2.5 px-4 py-2 rounded-full bg-aura-green/[0.08] border border-aura-green/20 text-aura-green text-xs font-medium mb-6">
+                    <span class="relative flex h-2 w-2">
+                        <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-aura-green opacity-75"></span>
+                        <span class="relative inline-flex rounded-full h-2 w-2 bg-aura-green"></span>
+                    </span>
                     AI ANALYSIS ENGINE ONLINE
                 </div>
                 <h1 class="text-4xl md:text-5xl font-bold tracking-tight mb-4">
-                    Submit Your <span class="text-aura-green text-glow">Pitch Deck</span>
+                    Submit Your <span class="text-gradient-green text-glow-green">Pitch Deck</span>
                 </h1>
                 <p class="text-aura-muted text-lg max-w-md mx-auto">
                     Upload your climate-tech PDF. Aura's AI will extract key financial and scientific metrics in seconds.
@@ -115,13 +143,12 @@
             </div>
 
             <!-- Upload Form -->
-            <form id="upload-form" class="space-y-6 fade-up-delay">
+            <form id="upload-form" class="space-y-6 fade-up-1">
 
                 <!-- Company Name -->
                 <div>
                     <label for="company-name" class="block text-sm font-medium text-aura-muted mb-2">Company Name</label>
-                    <input type="text" id="company-name" name="company_name" placeholder="e.g. VoltaGrid Energy"
-                        class="w-full px-4 py-3 bg-aura-card border border-aura-border rounded-xl text-white placeholder-aura-dim focus:outline-none focus:border-aura-green/50 focus:ring-1 focus:ring-aura-green/20 transition-all">
+                    <input type="text" id="company-name" name="company_name" placeholder="e.g. VoltaGrid Energy" class="founder-input">
                 </div>
 
                 <!-- Requested Funding -->
@@ -129,30 +156,26 @@
                     <label for="funding" class="block text-sm font-medium text-aura-muted mb-2">Requested Funding</label>
                     <div class="relative">
                         <span class="absolute left-4 top-1/2 -translate-y-1/2 text-aura-dim">$</span>
-                        <input type="text" id="funding" name="funding" placeholder="18,000,000"
-                            class="w-full pl-8 pr-4 py-3 bg-aura-card border border-aura-border rounded-xl text-white placeholder-aura-dim focus:outline-none focus:border-aura-green/50 focus:ring-1 focus:ring-aura-green/20 transition-all">
+                        <input type="text" id="funding" name="funding" placeholder="18,000,000" class="founder-input !pl-8">
                     </div>
                 </div>
 
                 <!-- Milestone Description -->
                 <div>
                     <label for="milestone-desc" class="block text-sm font-medium text-aura-muted mb-2">Key Milestone</label>
-                    <input type="text" id="milestone-desc" name="milestone_desc" placeholder="Phase 1: Lab Prototype Verification" value="Phase 1: Lab Prototype Verification"
-                        class="w-full px-4 py-3 bg-aura-card border border-aura-border rounded-xl text-white placeholder-aura-dim focus:outline-none focus:border-aura-green/50 focus:ring-1 focus:ring-aura-green/20 transition-all">
+                    <input type="text" id="milestone-desc" name="milestone_desc" placeholder="Phase 1: Lab Prototype Verification" value="Phase 1: Lab Prototype Verification" class="founder-input">
                 </div>
 
                 <!-- Phone Number -->
                 <div>
                     <label for="phone" class="block text-sm font-medium text-aura-muted mb-2">Phone Number</label>
-                    <input type="tel" id="phone" name="phone" placeholder="+1 (512) 555-0199"
-                        class="w-full px-4 py-3 bg-aura-black border border-aura-border rounded-xl text-white placeholder-aura-dim focus:outline-none focus:border-aura-green/50 focus:ring-1 focus:ring-aura-green/20 transition-all">
+                    <input type="tel" id="phone" name="phone" placeholder="+1 (512) 555-0199" class="founder-input">
                 </div>
 
                 <!-- LinkedIn Profile URL -->
                 <div>
                     <label for="linkedin" class="block text-sm font-medium text-aura-muted mb-2">LinkedIn Profile URL</label>
-                    <input type="url" id="linkedin" name="linkedin" placeholder="https://linkedin.com/in/yourprofile"
-                        class="w-full px-4 py-3 bg-aura-black border border-aura-border rounded-xl text-white placeholder-aura-dim focus:outline-none focus:border-aura-green/50 focus:ring-1 focus:ring-aura-green/20 transition-all">
+                    <input type="url" id="linkedin" name="linkedin" placeholder="https://linkedin.com/in/yourprofile" class="founder-input">
                 </div>
 
                 <!-- PDF Upload Zone -->
@@ -183,7 +206,8 @@
 
                 <!-- Submit Button -->
                 <button type="submit" id="submit-btn"
-                    class="w-full py-4 bg-aura-green text-black font-semibold rounded-xl hover:bg-aura-green-dim transition-all duration-300 hover:shadow-lg hover:shadow-aura-green/20 disabled:opacity-40 disabled:cursor-not-allowed">
+                    class="w-full py-4 font-semibold rounded-xl transition-all duration-300 disabled:opacity-40 disabled:cursor-not-allowed text-sm"
+                    style="background: linear-gradient(135deg, #00ff88, #00cc6a); color: #000; box-shadow: 0 0 30px rgba(0,255,136,0.2);">
                     Analyze with Aura AI
                 </button>
             </form>
@@ -320,7 +344,7 @@
     </main>
 
     <!-- Footer -->
-    <footer class="border-t border-aura-border py-8">
+    <footer class="border-t border-white/[0.05] py-8 relative z-10">
         <div class="max-w-6xl mx-auto px-6 flex items-center justify-between">
             <p class="text-aura-dim text-sm">© 2026 Aura AI — Climate Capital Operating System</p>
             <p class="text-aura-dim text-xs font-mono">v0.2.0</p>

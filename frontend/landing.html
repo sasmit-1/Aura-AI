@@ -1,364 +1,972 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en" class="scroll-smooth">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Aura AI — Climate Capital Operating System</title>
-    <meta name="description" content="Deterministic AI due diligence and autonomous smart-contract escrows for climate tech. The future of climate capital starts here.">
+    <meta
+      name="description"
+      content="Deterministic AI due diligence and autonomous smart-contract escrows for climate tech. The future of climate capital starts here."
+    />
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/css/styles.css" />
     <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    fontFamily: { sans: ['Inter', 'sans-serif'], mono: ['JetBrains Mono', 'monospace'] },
-                    colors: {
-                        aura: {
-                            black: '#000000',
-                            surface: '#0a0a0a',
-                            card: '#111111',
-                            border: '#1a1a1a',
-                            dim: '#333333',
-                            muted: '#737373',
-                            green: '#00ff88',
-                            'green-dim': '#00cc6a',
-                            cyan: '#00d4ff',
-                            amber: '#ffb800',
-                            red: '#ff3b5c',
-                        }
-                    }
-                }
-            }
-        }
+      tailwind.config = {
+        theme: {
+          extend: {
+            fontFamily: {
+              sans: ["Inter", "sans-serif"],
+              mono: ["JetBrains Mono", "monospace"],
+            },
+            colors: {
+              aura: {
+                black: "#000000",
+                surface: "#050508",
+                card: "#0a0a0f",
+                border: "rgba(255,255,255,0.06)",
+                dim: "#2a2a35",
+                muted: "#6b6b80",
+                green: "#00ff88",
+                "green-dim": "#00cc6a",
+                cyan: "#00d4ff",
+                amber: "#ffb800",
+                red: "#ff3b5c",
+              },
+            },
+          },
+        },
+      };
     </script>
     <style>
-        body { background: #000; }
+      /* ── Hero-specific styles ── */
+      .hero-section {
+        min-height: 100vh;
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+      }
 
-        /* Hero gradient pulses */
-        .hero-glow {
-            background:
-                radial-gradient(ellipse 80% 50% at 50% -10%, rgba(0,255,136,0.08) 0%, transparent 60%),
-                radial-gradient(ellipse 60% 40% at 80% 50%, rgba(0,212,255,0.05) 0%, transparent 50%),
-                radial-gradient(ellipse 40% 30% at 20% 60%, rgba(0,255,136,0.03) 0%, transparent 50%);
-        }
+      /* Grid background */
+      .grid-bg {
+        background-image:
+          linear-gradient(rgba(0, 255, 136, 0.02) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(0, 255, 136, 0.02) 1px, transparent 1px);
+        background-size: 80px 80px;
+      }
 
-        /* Animated grid background */
-        .grid-bg {
-            background-image:
-                linear-gradient(rgba(0,255,136,0.025) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(0,255,136,0.025) 1px, transparent 1px);
-            background-size: 80px 80px;
-        }
+      /* Typewriter cursor */
+      .typewriter-cursor {
+        display: inline-block;
+        width: 2px;
+        height: 1.1em;
+        background: var(--aura-green);
+        margin-left: 2px;
+        vertical-align: text-bottom;
+        animation: typewriter-cursor 0.8s step-end infinite;
+      }
 
-        /* Glow buttons */
-        .btn-glow-green {
-            box-shadow: 0 0 30px rgba(0,255,136,0.15), 0 0 60px rgba(0,255,136,0.05);
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-        .btn-glow-green:hover {
-            box-shadow: 0 0 40px rgba(0,255,136,0.3), 0 0 80px rgba(0,255,136,0.1);
-            transform: translateY(-2px);
-        }
-        .btn-glow-cyan {
-            box-shadow: 0 0 30px rgba(0,212,255,0.12), 0 0 60px rgba(0,212,255,0.04);
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-        .btn-glow-cyan:hover {
-            box-shadow: 0 0 40px rgba(0,212,255,0.25), 0 0 80px rgba(0,212,255,0.08);
-            transform: translateY(-2px);
-        }
+      /* Word reveal */
+      .word-reveal {
+        display: inline-block;
+        opacity: 0;
+        transform: translateY(20px) scale(0.95);
+        filter: blur(6px);
+        transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+      .word-reveal.visible {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+        filter: blur(0);
+      }
 
-        /* Text glow */
-        .text-glow-green { text-shadow: 0 0 40px rgba(0,255,136,0.3), 0 0 80px rgba(0,255,136,0.1); }
-        .text-glow-cyan { text-shadow: 0 0 30px rgba(0,212,255,0.3); }
+      /* Counter animation */
+      .stat-counter {
+        transition: all 0.4s var(--transition-smooth);
+      }
+      .stat-counter:hover {
+        transform: translateY(-2px);
+      }
 
-        /* Fade animations */
-        @keyframes fadeUp {
-            from { opacity: 0; transform: translateY(30px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-        @keyframes float {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-8px); }
-        }
-        @keyframes pulse-ring {
-            0% { transform: scale(1); opacity: 0.3; }
-            100% { transform: scale(1.8); opacity: 0; }
-        }
-        .fade-up { animation: fadeUp 0.8s ease-out forwards; }
-        .fade-up-1 { animation: fadeUp 0.8s ease-out 0.15s forwards; opacity: 0; }
-        .fade-up-2 { animation: fadeUp 0.8s ease-out 0.3s forwards; opacity: 0; }
-        .fade-up-3 { animation: fadeUp 0.8s ease-out 0.45s forwards; opacity: 0; }
-        .fade-up-4 { animation: fadeUp 0.8s ease-out 0.6s forwards; opacity: 0; }
-        .fade-in { animation: fadeIn 1s ease-out forwards; }
-        .float-anim { animation: float 6s ease-in-out infinite; }
+      /* Feature card 3D tilt area */
+      .feature-card {
+        transform-style: preserve-3d;
+        perspective: 600px;
+      }
+      .feature-card-inner {
+        transition: all 0.5s var(--transition-smooth);
+        transform-style: preserve-3d;
+      }
+      .feature-card:hover .feature-card-inner {
+        transform: translateZ(10px);
+      }
+      .feature-icon-box {
+        transition: all 0.5s var(--transition-smooth);
+      }
+      .feature-card:hover .feature-icon-box {
+        transform: scale(1.1) translateZ(15px);
+        box-shadow: 0 0 30px currentColor;
+      }
 
-        /* Stat card hover */
-        .stat-card {
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-        .stat-card:hover {
-            border-color: rgba(0,255,136,0.3);
-            transform: translateY(-4px);
-            box-shadow: 0 20px 60px rgba(0,0,0,0.5), 0 0 30px rgba(0,255,136,0.05);
-        }
+      /* Step card */
+      .step-card {
+        transition: all 0.4s var(--transition-smooth);
+      }
+      .step-card:hover {
+        border-color: rgba(255, 255, 255, 0.12);
+        background: rgba(10, 10, 18, 0.7);
+        transform: translateX(8px);
+      }
+      .step-number {
+        transition: all 0.4s var(--transition-smooth);
+      }
+      .step-card:hover .step-number {
+        transform: scale(1.15);
+        box-shadow: 0 0 25px currentColor;
+      }
 
-        /* Divider glow */
-        .divider-glow {
-            height: 1px;
-            background: linear-gradient(90deg, transparent, rgba(0,255,136,0.3), rgba(0,212,255,0.2), transparent);
-        }
+      /* SVG stroke draw animation */
+      .stroke-draw {
+        stroke-dasharray: 100;
+        stroke-dashoffset: 100;
+      }
+      .stroke-draw.visible {
+        animation: strokeDraw 1.5s ease-out forwards;
+      }
     </style>
-</head>
-<body class="bg-black text-white font-sans min-h-screen antialiased">
+  </head>
+  <body class="bg-black text-white font-sans antialiased">
+    <!-- ═══ Particle Canvas ═══ -->
+    <canvas id="particle-canvas"></canvas>
 
-    <!-- Nav -->
-    <nav class="fixed top-0 w-full z-50 bg-black/70 backdrop-blur-xl border-b border-aura-border">
-        <div class="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
-            <div class="flex items-center gap-3">
-                <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-aura-green/20 to-aura-cyan/20 border border-aura-green/30 flex items-center justify-center">
-                    <span class="text-aura-green font-bold text-sm">A</span>
-                </div>
-                <span class="text-white font-semibold tracking-tight text-lg">Aura <span class="text-aura-muted font-normal">AI</span></span>
-            </div>
-            <div class="flex items-center gap-6">
-                <a href="#features" class="hidden sm:inline text-sm text-aura-muted hover:text-white transition-colors">Features</a>
-                <a href="#how-it-works" class="hidden sm:inline text-sm text-aura-muted hover:text-white transition-colors">How It Works</a>
-                <a href="/auth.html" class="px-5 py-2 bg-aura-card border border-aura-border rounded-lg text-sm font-medium text-white hover:border-aura-green/40 hover:text-aura-green transition-all duration-300">
-                    Sign In
-                </a>
-            </div>
+    <!-- ═══ Navigation ═══ -->
+    <nav class="glass-nav fixed top-0 w-full z-50">
+      <div
+        class="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between"
+      >
+        <a href="/landing.html" class="flex items-center gap-3 group">
+          <div
+            class="w-9 h-9 rounded-xl bg-gradient-to-br from-aura-green/15 to-aura-cyan/10 border border-aura-green/25 flex items-center justify-center group-hover:border-aura-green/50 group-hover:shadow-[0_0_20px_rgba(0,255,136,0.15)] transition-all duration-500"
+          >
+            <span class="text-aura-green font-bold text-sm">A</span>
+          </div>
+          <span class="text-white font-semibold tracking-tight text-lg"
+            >Aura <span class="text-aura-muted font-normal">AI</span></span
+          >
+        </a>
+        <div class="flex items-center gap-6">
+          <a
+            href="#features"
+            class="hidden sm:inline text-sm text-aura-muted hover:text-white transition-colors duration-300"
+            >Features</a
+          >
+          <a
+            href="#how-it-works"
+            class="hidden sm:inline text-sm text-aura-muted hover:text-white transition-colors duration-300"
+            >How It Works</a
+          >
+          <a
+            href="/auth.html"
+            class="btn-primary btn-green !py-2.5 !px-5 !text-sm !rounded-xl"
+          >
+            Sign In
+            <svg
+              class="w-4 h-4 -mr-1"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M13 7l5 5m0 0l-5 5m5-5H6"
+              />
+            </svg>
+          </a>
         </div>
+      </div>
     </nav>
 
-    <!-- Hero Section -->
-    <section class="relative min-h-screen flex items-center justify-center hero-glow grid-bg overflow-hidden">
-        <!-- Decorative orbs -->
-        <div class="absolute top-1/4 left-1/4 w-96 h-96 bg-aura-green/5 rounded-full blur-[120px] float-anim"></div>
-        <div class="absolute bottom-1/4 right-1/4 w-80 h-80 bg-aura-cyan/5 rounded-full blur-[100px] float-anim" style="animation-delay: -3s;"></div>
+    <!-- ═══ HERO SECTION ═══ -->
+    <section class="hero-section grid-bg" id="hero">
+      <!-- Aurora background orbs -->
+      <div class="aurora-bg">
+        <div
+          class="aurora-orb w-[600px] h-[600px] bg-aura-green/[0.07] top-[-10%] left-[20%]"
+          style="animation-delay: 0s"
+        ></div>
+        <div
+          class="aurora-orb w-[500px] h-[500px] bg-aura-cyan/[0.05] bottom-[10%] right-[15%]"
+          style="animation-delay: -3s"
+        ></div>
+        <div
+          class="aurora-orb w-[400px] h-[400px] bg-purple-500/[0.04] top-[30%] right-[30%]"
+          style="animation-delay: -6s"
+        ></div>
+      </div>
 
-        <div class="relative z-10 max-w-5xl mx-auto px-6 text-center pt-20">
-            <!-- Badge -->
-            <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-aura-green/8 border border-aura-green/20 text-aura-green text-xs font-medium mb-8 fade-up">
-                <span class="relative flex h-2 w-2">
-                    <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-aura-green opacity-75"></span>
-                    <span class="relative inline-flex rounded-full h-2 w-2 bg-aura-green"></span>
-                </span>
-                NOW IN PRIVATE BETA
-            </div>
+      <div class="relative z-10 max-w-6xl mx-auto px-6 text-center pt-20">
+        <!-- Badge -->
+        <div
+          class="inline-flex items-center gap-2.5 px-5 py-2.5 rounded-full bg-aura-green/[0.08] border border-aura-green/20 text-aura-green text-xs font-medium mb-10 fade-up"
+        >
+          <span class="relative flex h-2 w-2">
+            <span
+              class="animate-ping absolute inline-flex h-full w-full rounded-full bg-aura-green opacity-75"
+            ></span>
+            <span
+              class="relative inline-flex rounded-full h-2 w-2 bg-aura-green"
+            ></span>
+          </span>
+          NOW IN PRIVATE BETA
+        </div>
 
-            <!-- Headline -->
-            <h1 class="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-black tracking-tight leading-[0.95] mb-8 fade-up-1">
-                <span class="block">Aura AI</span>
-                <span class="block mt-2 text-glow-green">
-                    <span class="bg-gradient-to-r from-aura-green via-emerald-400 to-aura-cyan bg-clip-text text-transparent">
-                        Climate Capital
-                    </span>
-                </span>
-                <span class="block mt-2 text-aura-muted text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold">
-                    Operating System
-                </span>
-            </h1>
+        <!-- Headline with word-by-word reveal -->
+        <h1
+          class="text-5xl sm:text-6xl md:text-7xl lg:text-[5.5rem] font-black tracking-tight leading-[1] mb-4"
+          id="hero-headline"
+        >
+          <span class="block mb-3" id="headline-line1"></span>
+          <span class="block mb-3 text-glow-green" id="headline-line2"></span>
+          <span
+            class="block text-aura-muted text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold"
+            id="headline-line3"
+          ></span>
+        </h1>
 
-            <!-- Subtext -->
-            <p class="text-lg sm:text-xl text-aura-muted max-w-2xl mx-auto mb-12 leading-relaxed fade-up-2">
-                Deterministic AI due diligence and autonomous smart-contract escrows for climate tech.
-                <span class="text-white/80">The future of climate capital starts here.</span>
+        <!-- Typewriter subtitle -->
+        <p
+          class="text-lg sm:text-xl text-aura-muted max-w-2xl mx-auto mb-14 leading-relaxed fade-up-3"
+          id="subtitle-container"
+        >
+          <span id="typewriter-text"></span
+          ><span class="typewriter-cursor"></span>
+        </p>
+
+        <!-- CTA Buttons -->
+        <div
+          class="flex flex-col sm:flex-row items-center justify-center gap-5 mb-16 fade-up-4"
+        >
+          <a
+            href="/auth.html?role=founder"
+            id="cta-founder"
+            class="btn-primary btn-green w-full sm:w-auto !text-lg !py-4 !px-10 !rounded-2xl"
+          >
+            <svg
+              class="w-5 h-5"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+              />
+            </svg>
+            I am a Founder
+          </a>
+          <a
+            href="/auth.html?role=investor"
+            id="cta-investor"
+            class="btn-primary btn-cyan w-full sm:w-auto !text-lg !py-4 !px-10 !rounded-2xl"
+          >
+            <svg
+              class="w-5 h-5"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"
+              />
+            </svg>
+            I am an Investor
+          </a>
+        </div>
+
+        <!-- Floating Stats Row -->
+        <div class="grid grid-cols-3 gap-4 max-w-xl mx-auto mb-12 fade-up-5">
+          <div
+            class="stat-counter glass-card !rounded-xl p-4 text-center cursor-default"
+          >
+            <p
+              class="text-2xl font-bold text-aura-green"
+              data-target="847"
+              data-suffix="+"
+            >
+              0
             </p>
-
-            <!-- CTA Buttons -->
-            <div class="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-6 mb-16 fade-up-3">
-                <a href="/auth.html?role=founder" id="cta-founder"
-                   class="btn-glow-green group w-full sm:w-auto inline-flex items-center justify-center gap-3 px-8 py-4 bg-aura-green/10 border border-aura-green/40 rounded-2xl text-aura-green font-semibold text-lg hover:bg-aura-green/15 transition-all">
-                    <svg class="w-5 h-5 group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
-                    </svg>
-                    I am a Founder
-                </a>
-                <a href="/auth.html?role=investor" id="cta-investor"
-                   class="btn-glow-cyan group w-full sm:w-auto inline-flex items-center justify-center gap-3 px-8 py-4 bg-aura-cyan/10 border border-aura-cyan/40 rounded-2xl text-aura-cyan font-semibold text-lg hover:bg-aura-cyan/15 transition-all">
-                    <svg class="w-5 h-5 group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/>
-                    </svg>
-                    I am an Investor
-                </a>
-            </div>
-
-            <!-- Trust line -->
-            <p class="text-xs text-aura-dim font-mono tracking-wider fade-up-4">
-                BACKED BY SCIENCE · POWERED BY AI · SECURED BY SMART CONTRACTS
+            <p
+              class="text-[11px] text-aura-muted mt-1 font-mono uppercase tracking-wider"
+            >
+              Deals Analyzed
             </p>
+          </div>
+          <div
+            class="stat-counter glass-card !rounded-xl p-4 text-center cursor-default"
+          >
+            <p
+              class="text-2xl font-bold text-aura-cyan"
+              data-target="12"
+              data-prefix="$"
+              data-suffix="M"
+            >
+              0
+            </p>
+            <p
+              class="text-[11px] text-aura-muted mt-1 font-mono uppercase tracking-wider"
+            >
+              Capital Deployed
+            </p>
+          </div>
+          <div
+            class="stat-counter glass-card !rounded-xl p-4 text-center cursor-default"
+          >
+            <p
+              class="text-2xl font-bold text-aura-amber"
+              data-target="99"
+              data-suffix="%"
+            >
+              0
+            </p>
+            <p
+              class="text-[11px] text-aura-muted mt-1 font-mono uppercase tracking-wider"
+            >
+              Accuracy Rate
+            </p>
+          </div>
         </div>
 
-        <!-- Bottom gradient fade -->
-        <div class="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-black to-transparent z-10"></div>
+        <!-- Trust line -->
+        <p
+          class="text-[11px] text-aura-dim font-mono tracking-[0.2em] fade-up-5"
+        >
+          BACKED BY SCIENCE · POWERED BY AI · SECURED BY SMART CONTRACTS
+        </p>
+      </div>
+
+      <!-- Scroll indicator -->
+      <div
+        class="absolute bottom-8 left-1/2 -translate-x-1/2 z-10 scroll-indicator"
+      >
+        <svg
+          class="w-6 h-6 text-aura-muted"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="1.5"
+            d="M19 14l-7 7m0 0l-7-7m7 7V3"
+          />
+        </svg>
+      </div>
+
+      <!-- Bottom gradient fade -->
+      <div
+        class="absolute bottom-0 left-0 right-0 h-40 bg-gradient-to-t from-black to-transparent z-10"
+      ></div>
     </section>
 
-    <!-- Divider -->
+    <!-- ═══ DIVIDER ═══ -->
     <div class="divider-glow"></div>
 
-    <!-- Features Section -->
-    <section id="features" class="py-24 px-6">
-        <div class="max-w-7xl mx-auto">
-            <div class="text-center mb-16">
-                <p class="text-aura-green text-xs font-mono tracking-widest uppercase mb-3">The Platform</p>
-                <h2 class="text-3xl sm:text-4xl font-bold tracking-tight mb-4">Three Pillars of Climate Capital</h2>
-                <p class="text-aura-muted max-w-lg mx-auto">End-to-end infrastructure, from pitch deck to disbursement — fully autonomous.</p>
-            </div>
-
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <!-- Card 1: RAG Engine -->
-                <div class="stat-card bg-aura-card border border-aura-border rounded-2xl p-8">
-                    <div class="w-12 h-12 rounded-xl bg-aura-green/10 border border-aura-green/20 flex items-center justify-center mb-6">
-                        <svg class="w-6 h-6 text-aura-green" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/>
-                        </svg>
-                    </div>
-                    <h3 class="text-white font-semibold text-lg mb-2">AI Due Diligence</h3>
-                    <p class="text-aura-muted text-sm leading-relaxed">
-                        Upload a pitch deck PDF. Our RAG engine extracts scientific claims, cross-references
-                        thermodynamic data, and produces a deterministic feasibility score in seconds.
-                    </p>
-                    <div class="mt-6 pt-4 border-t border-aura-border">
-                        <p class="text-aura-green text-xs font-mono">Llama 3.3 70B · Groq Inference</p>
-                    </div>
-                </div>
-
-                <!-- Card 2: Smart Escrow -->
-                <div class="stat-card bg-aura-card border border-aura-border rounded-2xl p-8">
-                    <div class="w-12 h-12 rounded-xl bg-aura-amber/10 border border-aura-amber/20 flex items-center justify-center mb-6">
-                        <svg class="w-6 h-6 text-aura-amber" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
-                        </svg>
-                    </div>
-                    <h3 class="text-white font-semibold text-lg mb-2">Smart Escrow</h3>
-                    <p class="text-aura-muted text-sm leading-relaxed">
-                        Milestone-based capital deployment. Funds are locked in escrow and disbursed
-                        autonomously only when oracle verification confirms real-world progress.
-                    </p>
-                    <div class="mt-6 pt-4 border-t border-aura-border">
-                        <p class="text-aura-amber text-xs font-mono">Locked → Verified → Disbursed</p>
-                    </div>
-                </div>
-
-                <!-- Card 3: Real-time -->
-                <div class="stat-card bg-aura-card border border-aura-border rounded-2xl p-8">
-                    <div class="w-12 h-12 rounded-xl bg-aura-cyan/10 border border-aura-cyan/20 flex items-center justify-center mb-6">
-                        <svg class="w-6 h-6 text-aura-cyan" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M13 10V3L4 14h7v7l9-11h-7z"/>
-                        </svg>
-                    </div>
-                    <h3 class="text-white font-semibold text-lg mb-2">Real-Time Feed</h3>
-                    <p class="text-aura-muted text-sm leading-relaxed">
-                        WebSocket-powered live dashboard. Every oracle verification event, escrow
-                        disbursement, and new deal instantly broadcasts to all connected investors.
-                    </p>
-                    <div class="mt-6 pt-4 border-t border-aura-border">
-                        <p class="text-aura-cyan text-xs font-mono">WebSocket · Sub-second latency</p>
-                    </div>
-                </div>
-            </div>
+    <!-- ═══ FEATURES SECTION ═══ -->
+    <section id="features" class="py-28 px-6 relative">
+      <div class="max-w-7xl mx-auto">
+        <div class="text-center mb-20">
+          <p
+            class="text-aura-green text-xs font-mono tracking-[0.25em] uppercase mb-4 reveal"
+          >
+            The Platform
+          </p>
+          <h2
+            class="text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight mb-5 reveal delay-1"
+          >
+            Three Pillars of Climate Capital
+          </h2>
+          <p class="text-aura-muted max-w-lg mx-auto reveal delay-2">
+            End-to-end infrastructure, from pitch deck to disbursement — fully
+            autonomous.
+          </p>
         </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-7">
+          <!-- Card 1: RAG Engine -->
+          <div class="feature-card reveal delay-1">
+            <div class="feature-card-inner glass-card p-8 h-full">
+              <div
+                class="feature-icon-box w-14 h-14 rounded-2xl bg-aura-green/[0.08] border border-aura-green/20 flex items-center justify-center mb-7 text-aura-green"
+              >
+                <svg
+                  class="w-7 h-7 stroke-draw"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                  stroke-width="1.5"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"
+                  />
+                </svg>
+              </div>
+              <h3 class="text-white font-semibold text-xl mb-3">
+                AI Due Diligence
+              </h3>
+              <p class="text-aura-muted text-sm leading-relaxed mb-6">
+                Upload a pitch deck PDF. Our RAG engine extracts scientific
+                claims, cross-references thermodynamic data, and produces a
+                deterministic feasibility score in seconds.
+              </p>
+              <div class="pt-5 border-t border-white/[0.06]">
+                <p class="text-aura-green text-xs font-mono">
+                  Llama 3.3 70B · Groq Inference
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Card 2: Smart Escrow -->
+          <div class="feature-card reveal delay-2">
+            <div class="feature-card-inner glass-card p-8 h-full">
+              <div
+                class="feature-icon-box w-14 h-14 rounded-2xl bg-aura-amber/[0.08] border border-aura-amber/20 flex items-center justify-center mb-7 text-aura-amber"
+              >
+                <svg
+                  class="w-7 h-7 stroke-draw"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                  stroke-width="1.5"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"
+                  />
+                </svg>
+              </div>
+              <h3 class="text-white font-semibold text-xl mb-3">
+                Smart Escrow
+              </h3>
+              <p class="text-aura-muted text-sm leading-relaxed mb-6">
+                Milestone-based capital deployment. Funds are locked in escrow
+                and disbursed autonomously only when oracle verification
+                confirms real-world progress.
+              </p>
+              <div class="pt-5 border-t border-white/[0.06]">
+                <p class="text-aura-amber text-xs font-mono">
+                  Locked → Verified → Disbursed
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Card 3: Real-time -->
+          <div class="feature-card reveal delay-3">
+            <div class="feature-card-inner glass-card p-8 h-full">
+              <div
+                class="feature-icon-box w-14 h-14 rounded-2xl bg-aura-cyan/[0.08] border border-aura-cyan/20 flex items-center justify-center mb-7 text-aura-cyan"
+              >
+                <svg
+                  class="w-7 h-7 stroke-draw"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                  stroke-width="1.5"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    d="M13 10V3L4 14h7v7l9-11h-7z"
+                  />
+                </svg>
+              </div>
+              <h3 class="text-white font-semibold text-xl mb-3">
+                Real-Time Feed
+              </h3>
+              <p class="text-aura-muted text-sm leading-relaxed mb-6">
+                WebSocket-powered live dashboard. Every oracle verification
+                event, escrow disbursement, and new deal instantly broadcasts to
+                all connected investors.
+              </p>
+              <div class="pt-5 border-t border-white/[0.06]">
+                <p class="text-aura-cyan text-xs font-mono">
+                  WebSocket · Sub-second latency
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </section>
 
-    <!-- Divider -->
+    <!-- ═══ DIVIDER ═══ -->
     <div class="divider-glow"></div>
 
-    <!-- How It Works -->
-    <section id="how-it-works" class="py-24 px-6 grid-bg">
-        <div class="max-w-5xl mx-auto">
-            <div class="text-center mb-16">
-                <p class="text-aura-cyan text-xs font-mono tracking-widest uppercase mb-3">The Flow</p>
-                <h2 class="text-3xl sm:text-4xl font-bold tracking-tight mb-4">How Aura AI Works</h2>
-                <p class="text-aura-muted max-w-md mx-auto">From pitch deck to funded milestone — fully autonomous, fully transparent.</p>
-            </div>
-
-            <div class="space-y-6">
-                <!-- Step 1 -->
-                <div class="flex items-start gap-6 p-6 rounded-2xl bg-aura-card/50 border border-aura-border hover:border-aura-green/20 transition-colors">
-                    <div class="flex-shrink-0 w-10 h-10 rounded-full bg-aura-green/10 border border-aura-green/30 flex items-center justify-center">
-                        <span class="text-aura-green font-bold text-sm">1</span>
-                    </div>
-                    <div>
-                        <h3 class="text-white font-semibold mb-1">Founder uploads pitch deck</h3>
-                        <p class="text-aura-muted text-sm">Submit your climate-tech PDF. Aura's RAG engine extracts CAPEX, efficiency targets, and scientific claims instantly.</p>
-                    </div>
-                </div>
-                <!-- Step 2 -->
-                <div class="flex items-start gap-6 p-6 rounded-2xl bg-aura-card/50 border border-aura-border hover:border-aura-green/20 transition-colors">
-                    <div class="flex-shrink-0 w-10 h-10 rounded-full bg-aura-green/10 border border-aura-green/30 flex items-center justify-center">
-                        <span class="text-aura-green font-bold text-sm">2</span>
-                    </div>
-                    <div>
-                        <h3 class="text-white font-semibold mb-1">AI generates feasibility score</h3>
-                        <p class="text-aura-muted text-sm">Llama 3.3 70B cross-references scientific databases to assign a deterministic 1-100 feasibility score.</p>
-                    </div>
-                </div>
-                <!-- Step 3 -->
-                <div class="flex items-start gap-6 p-6 rounded-2xl bg-aura-card/50 border border-aura-border hover:border-aura-amber/20 transition-colors">
-                    <div class="flex-shrink-0 w-10 h-10 rounded-full bg-aura-amber/10 border border-aura-amber/30 flex items-center justify-center">
-                        <span class="text-aura-amber font-bold text-sm">3</span>
-                    </div>
-                    <div>
-                        <h3 class="text-white font-semibold mb-1">Investor deploys capital to escrow</h3>
-                        <p class="text-aura-muted text-sm">Funds are locked against specific milestones. No disbursement until oracle verification confirms progress.</p>
-                    </div>
-                </div>
-                <!-- Step 4 -->
-                <div class="flex items-start gap-6 p-6 rounded-2xl bg-aura-card/50 border border-aura-border hover:border-aura-cyan/20 transition-colors">
-                    <div class="flex-shrink-0 w-10 h-10 rounded-full bg-aura-cyan/10 border border-aura-cyan/30 flex items-center justify-center">
-                        <span class="text-aura-cyan font-bold text-sm">4</span>
-                    </div>
-                    <div>
-                        <h3 class="text-white font-semibold mb-1">Oracle verifies → funds disburse</h3>
-                        <p class="text-aura-muted text-sm">Earth Engine API + lab telemetry confirm real-world progress. Smart contract releases funds automatically.</p>
-                    </div>
-                </div>
-            </div>
+    <!-- ═══ HOW IT WORKS ═══ -->
+    <section id="how-it-works" class="py-28 px-6 grid-bg relative">
+      <div class="max-w-5xl mx-auto">
+        <div class="text-center mb-20">
+          <p
+            class="text-aura-cyan text-xs font-mono tracking-[0.25em] uppercase mb-4 reveal"
+          >
+            The Flow
+          </p>
+          <h2
+            class="text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight mb-5 reveal delay-1"
+          >
+            How Aura AI Works
+          </h2>
+          <p class="text-aura-muted max-w-md mx-auto reveal delay-2">
+            From pitch deck to funded milestone — fully autonomous, fully
+            transparent.
+          </p>
         </div>
+
+        <div class="relative pl-12 sm:pl-16 space-y-8">
+          <!-- Animated vertical timeline line -->
+          <div class="timeline-line" id="timeline-line"></div>
+
+          <!-- Step 1 -->
+          <div
+            class="step-card glass-card !rounded-2xl p-7 relative reveal delay-1"
+          >
+            <div
+              class="step-number absolute -left-[3.4rem] sm:-left-[4.4rem] top-7 w-10 h-10 rounded-full bg-aura-green/10 border-2 border-aura-green/40 flex items-center justify-center text-aura-green font-bold text-sm z-10"
+            >
+              1
+            </div>
+            <h3 class="text-white font-semibold text-lg mb-2">
+              Founder uploads pitch deck
+            </h3>
+            <p class="text-aura-muted text-sm leading-relaxed">
+              Submit your climate-tech PDF. Aura's RAG engine extracts CAPEX,
+              efficiency targets, and scientific claims instantly.
+            </p>
+          </div>
+
+          <!-- Step 2 -->
+          <div
+            class="step-card glass-card !rounded-2xl p-7 relative reveal delay-2"
+          >
+            <div
+              class="step-number absolute -left-[3.4rem] sm:-left-[4.4rem] top-7 w-10 h-10 rounded-full bg-aura-green/10 border-2 border-aura-green/40 flex items-center justify-center text-aura-green font-bold text-sm z-10"
+            >
+              2
+            </div>
+            <h3 class="text-white font-semibold text-lg mb-2">
+              AI generates feasibility score
+            </h3>
+            <p class="text-aura-muted text-sm leading-relaxed">
+              Llama 3.3 70B cross-references scientific databases to assign a
+              deterministic 1-100 feasibility score.
+            </p>
+          </div>
+
+          <!-- Step 3 -->
+          <div
+            class="step-card glass-card !rounded-2xl p-7 relative reveal delay-3"
+          >
+            <div
+              class="step-number absolute -left-[3.4rem] sm:-left-[4.4rem] top-7 w-10 h-10 rounded-full bg-aura-amber/10 border-2 border-aura-amber/40 flex items-center justify-center text-aura-amber font-bold text-sm z-10"
+            >
+              3
+            </div>
+            <h3 class="text-white font-semibold text-lg mb-2">
+              Investor deploys capital to escrow
+            </h3>
+            <p class="text-aura-muted text-sm leading-relaxed">
+              Funds are locked against specific milestones. No disbursement
+              until oracle verification confirms progress.
+            </p>
+          </div>
+
+          <!-- Step 4 -->
+          <div
+            class="step-card glass-card !rounded-2xl p-7 relative reveal delay-4"
+          >
+            <div
+              class="step-number absolute -left-[3.4rem] sm:-left-[4.4rem] top-7 w-10 h-10 rounded-full bg-aura-cyan/10 border-2 border-aura-cyan/40 flex items-center justify-center text-aura-cyan font-bold text-sm z-10"
+            >
+              4
+            </div>
+            <h3 class="text-white font-semibold text-lg mb-2">
+              Oracle verifies → funds disburse
+            </h3>
+            <p class="text-aura-muted text-sm leading-relaxed">
+              Earth Engine API + lab telemetry confirm real-world progress.
+              Smart contract releases funds automatically.
+            </p>
+          </div>
+        </div>
+      </div>
     </section>
 
-    <!-- Divider -->
+    <!-- ═══ DIVIDER ═══ -->
     <div class="divider-glow"></div>
 
-    <!-- Final CTA -->
-    <section class="py-32 px-6 text-center relative overflow-hidden">
-        <div class="absolute inset-0 hero-glow opacity-50"></div>
-        <div class="relative z-10 max-w-3xl mx-auto">
-            <h2 class="text-4xl sm:text-5xl font-bold tracking-tight mb-6">
-                Ready to fund the <span class="text-aura-green text-glow-green">future</span>?
-            </h2>
-            <p class="text-aura-muted text-lg mb-10">Join the private beta. Whether you're building climate tech or investing in it.</p>
-            <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
-                <a href="/auth.html?role=founder"
-                   class="btn-glow-green w-full sm:w-auto px-8 py-4 bg-aura-green text-black font-semibold rounded-2xl hover:bg-aura-green-dim transition-all text-lg">
-                    Get Started as Founder
-                </a>
-                <a href="/auth.html?role=investor"
-                   class="btn-glow-cyan w-full sm:w-auto px-8 py-4 bg-aura-card border border-aura-cyan/40 text-aura-cyan font-semibold rounded-2xl hover:bg-aura-cyan/10 transition-all text-lg">
-                    Join as Investor
-                </a>
-            </div>
+    <!-- ═══ FINAL CTA ═══ -->
+    <section class="py-36 px-6 text-center relative overflow-hidden">
+      <div class="aurora-bg" style="opacity: 0.4">
+        <div
+          class="aurora-orb w-[500px] h-[500px] bg-aura-green/[0.06] top-[10%] left-[30%]"
+          style="animation-delay: -2s"
+        ></div>
+        <div
+          class="aurora-orb w-[400px] h-[400px] bg-aura-cyan/[0.04] bottom-[20%] right-[25%]"
+          style="animation-delay: -5s"
+        ></div>
+      </div>
+      <div class="relative z-10 max-w-3xl mx-auto">
+        <h2
+          class="text-4xl sm:text-5xl md:text-6xl font-bold tracking-tight mb-7 reveal"
+        >
+          Ready to fund the
+          <span class="text-gradient-green text-glow-green">future</span>?
+        </h2>
+        <p class="text-aura-muted text-lg sm:text-xl mb-12 reveal delay-1">
+          Join the private beta. Whether you're building climate tech or
+          investing in it.
+        </p>
+        <div
+          class="flex flex-col sm:flex-row items-center justify-center gap-5 reveal delay-2"
+        >
+          <a
+            href="/auth.html?role=founder"
+            class="btn-primary btn-solid-green w-full sm:w-auto !text-lg !py-4 !px-10 !rounded-2xl"
+          >
+            Get Started as Founder
+          </a>
+          <a
+            href="/auth.html?role=investor"
+            class="btn-primary btn-cyan w-full sm:w-auto !text-lg !py-4 !px-10 !rounded-2xl"
+          >
+            Join as Investor
+          </a>
         </div>
+      </div>
     </section>
 
-    <!-- Footer -->
-    <footer class="border-t border-aura-border py-10">
-        <div class="max-w-7xl mx-auto px-6 flex flex-col sm:flex-row items-center justify-between gap-4">
-            <div class="flex items-center gap-3">
-                <div class="w-6 h-6 rounded-md bg-gradient-to-br from-aura-green/20 to-aura-cyan/20 border border-aura-green/30 flex items-center justify-center">
-                    <span class="text-aura-green font-bold text-[10px]">A</span>
-                </div>
-                <p class="text-aura-dim text-sm">© 2026 Aura AI — Climate Capital Operating System</p>
-            </div>
-            <p class="text-aura-dim text-xs font-mono">v0.1.0</p>
+    <!-- ═══ FOOTER ═══ -->
+    <footer class="border-t border-white/[0.05] py-10">
+      <div
+        class="max-w-7xl mx-auto px-6 flex flex-col sm:flex-row items-center justify-between gap-4"
+      >
+        <div class="flex items-center gap-3">
+          <div
+            class="w-7 h-7 rounded-lg bg-gradient-to-br from-aura-green/15 to-aura-cyan/10 border border-aura-green/25 flex items-center justify-center"
+          >
+            <span class="text-aura-green font-bold text-[10px]">A</span>
+          </div>
+          <p class="text-aura-dim text-sm">
+            © 2026 Aura AI — Climate Capital Operating System
+          </p>
         </div>
+        <p class="text-aura-dim text-xs font-mono">v0.1.0</p>
+      </div>
     </footer>
 
-</body>
+    <!-- ═════════════════════════════════════════════════════════
+         JAVASCRIPT — Particles, Animations, Interactions
+         ═══════════════════════════════════════════════════════════ -->
+    <script>
+      (function () {
+        "use strict";
+
+        // ──────────────────────────────────────────────
+        // 1. PARTICLE CONSTELLATION CANVAS
+        // ──────────────────────────────────────────────
+        const canvas = document.getElementById("particle-canvas");
+        const ctx = canvas.getContext("2d");
+        let particles = [];
+        let mouse = { x: null, y: null };
+        const PARTICLE_COUNT = 80;
+        const CONNECTION_DIST = 150;
+        const MOUSE_RADIUS = 200;
+
+        function resizeCanvas() {
+          canvas.width = window.innerWidth;
+          canvas.height = window.innerHeight;
+        }
+        resizeCanvas();
+        window.addEventListener("resize", resizeCanvas);
+
+        document.addEventListener("mousemove", (e) => {
+          mouse.x = e.clientX;
+          mouse.y = e.clientY;
+        });
+        document.addEventListener("mouseleave", () => {
+          mouse.x = null;
+          mouse.y = null;
+        });
+
+        class Particle {
+          constructor() {
+            this.x = Math.random() * canvas.width;
+            this.y = Math.random() * canvas.height;
+            this.vx = (Math.random() - 0.5) * 0.5;
+            this.vy = (Math.random() - 0.5) * 0.5;
+            this.radius = Math.random() * 1.5 + 0.5;
+            this.baseAlpha = Math.random() * 0.4 + 0.1;
+            this.alpha = this.baseAlpha;
+            // Random color from palette
+            const colors = ["0,255,136", "0,212,255", "168,85,247"];
+            this.color = colors[Math.floor(Math.random() * colors.length)];
+          }
+
+          update() {
+            this.x += this.vx;
+            this.y += this.vy;
+
+            // Wrap around edges
+            if (this.x < 0) this.x = canvas.width;
+            if (this.x > canvas.width) this.x = 0;
+            if (this.y < 0) this.y = canvas.height;
+            if (this.y > canvas.height) this.y = 0;
+
+            // Mouse repulsion
+            if (mouse.x !== null && mouse.y !== null) {
+              const dx = this.x - mouse.x;
+              const dy = this.y - mouse.y;
+              const dist = Math.sqrt(dx * dx + dy * dy);
+              if (dist < MOUSE_RADIUS) {
+                const force = (MOUSE_RADIUS - dist) / MOUSE_RADIUS;
+                this.x += dx * force * 0.02;
+                this.y += dy * force * 0.02;
+                this.alpha = this.baseAlpha + force * 0.4;
+              } else {
+                this.alpha += (this.baseAlpha - this.alpha) * 0.05;
+              }
+            }
+          }
+
+          draw() {
+            ctx.beginPath();
+            ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+            ctx.fillStyle = `rgba(${this.color}, ${this.alpha})`;
+            ctx.fill();
+          }
+        }
+
+        // Initialize particles
+        for (let i = 0; i < PARTICLE_COUNT; i++) {
+          particles.push(new Particle());
+        }
+
+        function drawConnections() {
+          for (let i = 0; i < particles.length; i++) {
+            for (let j = i + 1; j < particles.length; j++) {
+              const dx = particles[i].x - particles[j].x;
+              const dy = particles[i].y - particles[j].y;
+              const dist = Math.sqrt(dx * dx + dy * dy);
+              if (dist < CONNECTION_DIST) {
+                const alpha = (1 - dist / CONNECTION_DIST) * 0.12;
+                ctx.beginPath();
+                ctx.moveTo(particles[i].x, particles[i].y);
+                ctx.lineTo(particles[j].x, particles[j].y);
+                ctx.strokeStyle = `rgba(0, 255, 136, ${alpha})`;
+                ctx.lineWidth = 0.5;
+                ctx.stroke();
+              }
+            }
+          }
+        }
+
+        function animateParticles() {
+          ctx.clearRect(0, 0, canvas.width, canvas.height);
+          particles.forEach((p) => {
+            p.update();
+            p.draw();
+          });
+          drawConnections();
+          requestAnimationFrame(animateParticles);
+        }
+        animateParticles();
+
+        // ──────────────────────────────────────────────
+        // 2. HERO HEADLINE WORD-BY-WORD REVEAL
+        // ──────────────────────────────────────────────
+        const lines = [
+          {
+            el: document.getElementById("headline-line1"),
+            words: ["Aura", "AI"],
+            isGradient: false,
+          },
+          {
+            el: document.getElementById("headline-line2"),
+            words: ["Climate", "Capital"],
+            isGradient: true,
+          },
+          {
+            el: document.getElementById("headline-line3"),
+            words: ["Operating", "System"],
+            isGradient: false,
+          },
+        ];
+
+        let wordIndex = 0;
+        const allWords = [];
+
+        lines.forEach((line) => {
+          line.words.forEach((word) => {
+            const span = document.createElement("span");
+            span.className = "word-reveal";
+            if (line.isGradient) {
+              span.classList.add("text-gradient-green");
+            }
+            span.textContent = word + " ";
+            line.el.appendChild(span);
+            allWords.push(span);
+          });
+        });
+
+        function revealNextWord() {
+          if (wordIndex < allWords.length) {
+            allWords[wordIndex].classList.add("visible");
+            wordIndex++;
+            setTimeout(revealNextWord, 120);
+          }
+        }
+        setTimeout(revealNextWord, 400);
+
+        // ──────────────────────────────────────────────
+        // 3. TYPEWRITER EFFECT
+        // ──────────────────────────────────────────────
+        const typewriterEl = document.getElementById("typewriter-text");
+        const fullText =
+          "Deterministic AI due diligence and autonomous smart-contract escrows for climate tech. The future of climate capital starts here.";
+        let charIndex = 0;
+
+        function typeNextChar() {
+          if (charIndex < fullText.length) {
+            typewriterEl.textContent += fullText[charIndex];
+            charIndex++;
+            const delay =
+              fullText[charIndex - 1] === "." ? 400 : Math.random() * 30 + 20;
+            setTimeout(typeNextChar, delay);
+          }
+        }
+        // Start after headline finishes
+        setTimeout(typeNextChar, 400 + allWords.length * 120 + 300);
+
+        // ──────────────────────────────────────────────
+        // 4. SCROLL-TRIGGERED REVEAL ANIMATIONS
+        // ──────────────────────────────────────────────
+        const revealObserver = new IntersectionObserver(
+          (entries) => {
+            entries.forEach((entry) => {
+              if (entry.isIntersecting) {
+                entry.target.classList.add("visible");
+                // Also trigger stroke-draw SVGs inside
+                entry.target.querySelectorAll(".stroke-draw").forEach((svg) => {
+                  svg.classList.add("visible");
+                });
+              }
+            });
+          },
+          { threshold: 0.15, rootMargin: "0px 0px -50px 0px" },
+        );
+
+        document
+          .querySelectorAll(
+            ".reveal, .reveal-left, .reveal-right, .reveal-scale",
+          )
+          .forEach((el) => {
+            revealObserver.observe(el);
+          });
+
+        // ──────────────────────────────────────────────
+        // 5. ANIMATED STAT COUNTERS
+        // ──────────────────────────────────────────────
+        function animateCounter(el) {
+          const target = parseInt(el.dataset.target);
+          const prefix = el.dataset.prefix || "";
+          const suffix = el.dataset.suffix || "";
+          const duration = 2000;
+          const startTime = performance.now();
+
+          function tick(now) {
+            const elapsed = now - startTime;
+            const progress = Math.min(elapsed / duration, 1);
+            // Ease out cubic
+            const eased = 1 - Math.pow(1 - progress, 3);
+            const current = Math.round(target * eased);
+            el.textContent = prefix + current.toLocaleString() + suffix;
+            if (progress < 1) requestAnimationFrame(tick);
+          }
+          requestAnimationFrame(tick);
+        }
+
+        const counterObserver = new IntersectionObserver(
+          (entries) => {
+            entries.forEach((entry) => {
+              if (entry.isIntersecting) {
+                const counter = entry.target.querySelector("[data-target]");
+                if (counter && !counter.dataset.animated) {
+                  counter.dataset.animated = "1";
+                  animateCounter(counter);
+                }
+              }
+            });
+          },
+          { threshold: 0.5 },
+        );
+
+        document
+          .querySelectorAll(".stat-counter")
+          .forEach((el) => counterObserver.observe(el));
+
+        // ──────────────────────────────────────────────
+        // 6. 3D TILT EFFECT ON FEATURE CARDS
+        // ──────────────────────────────────────────────
+        document.querySelectorAll(".feature-card").forEach((card) => {
+          card.addEventListener("mousemove", (e) => {
+            const rect = card.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            const centerX = rect.width / 2;
+            const centerY = rect.height / 2;
+            const rotateX = ((y - centerY) / centerY) * -8;
+            const rotateY = ((x - centerX) / centerX) * 8;
+            card.querySelector(".feature-card-inner").style.transform =
+              `perspective(600px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateZ(10px)`;
+          });
+
+          card.addEventListener("mouseleave", () => {
+            card.querySelector(".feature-card-inner").style.transform =
+              "perspective(600px) rotateX(0) rotateY(0) translateZ(0)";
+          });
+        });
+
+        // ──────────────────────────────────────────────
+        // 7. SMOOTH SCROLL FOR NAV LINKS
+        // ──────────────────────────────────────────────
+        document.querySelectorAll('a[href^="#"]').forEach((link) => {
+          link.addEventListener("click", (e) => {
+            e.preventDefault();
+            const target = document.querySelector(link.getAttribute("href"));
+            if (target)
+              target.scrollIntoView({ behavior: "smooth", block: "start" });
+          });
+        });
+      })();
+    </script>
+  </body>
 </html>

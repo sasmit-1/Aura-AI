@@ -5,6 +5,8 @@ Handles CORS, WebSocket broadcasting, DB init, and route mounting.
 
 import os
 import json
+import webbrowser
+import threading
 from contextlib import asynccontextmanager
 from fastapi import FastAPI, WebSocket, WebSocketDisconnect
 from fastapi.middleware.cors import CORSMiddleware
@@ -54,11 +56,21 @@ manager = ConnectionManager()
 # Lifespan — DB initialisation on startup
 # ---------------------------------------------------------------------------
 
+def open_browser_tabs():
+    if not os.environ.get("BROWSER_OPENED"):
+        os.environ["BROWSER_OPENED"] = "1"
+        try:
+            webbrowser.open("http://localhost:8000/index.html")
+            webbrowser.open("http://localhost:8000/landing.html")
+        except Exception as e:
+            print(f"Could not open browser: {e}")
+
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     # Startup
     init_db()
     print("🚀  Aura AI backend is live")
+    threading.Timer(1.5, open_browser_tabs).start()
     yield
     # Shutdown
     print("👋  Aura AI backend shutting down")
